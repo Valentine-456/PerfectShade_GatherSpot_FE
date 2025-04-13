@@ -4,14 +4,19 @@ import "../auth.css";
 
 const Login = () => {
   return (
-  <div className="phone-container">
-    <header className="auth-header">
-      <div className="header-logo"></div>
-    </header>
+    <div className="phone-container">
+      <header className="auth-header">
+        <div className="header-logo"></div>
+      </header>
       <form method="post" className="auth-form">
         <h2>Sign in</h2>
-        <input type="email" name="email" placeholder="abc@email.com" required/>
-        <input type="password" name="password" placeholder="Your password" required/>
+        <input type="email" name="email" placeholder="abc@email.com" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Your password"
+          required
+        />
         <button type="submit" className="primary-btn">
           SIGN IN <span className="arrow">➜</span>
         </button>
@@ -22,9 +27,11 @@ const Login = () => {
         <button type="button" className="social-btn facebook">
           <div className="icon"></div> Login with Facebook
         </button>
-        <p className="auth-footer">Don’t have an account? <Link to={AppRoutes.REGISTER}>Sign up</Link></p>
+        <p className="auth-footer">
+          Don’t have an account? <Link to={AppRoutes.REGISTER}>Sign up</Link>
+        </p>
       </form>
-  </div>
+    </div>
   );
 };
 
