@@ -30,8 +30,8 @@ body {
   }
   
   .header-logo {
-    width:200px;
-    height: 200px;
+    width:220px;
+    height: 220px;
     background-image: url("@/assets/images/Logo-BigSquared.png");
     background-size: contain;
     background-position: center;

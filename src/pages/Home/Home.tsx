@@ -1,11 +1,19 @@
-import EventCard from "@/components/EventCard/EventCard";
 import "./Home.css";
-import Header from "@/components/header/Header";
+import EventCard from "../../components/EventCard/EventCard";
+import Header from "../../components/Header/Header";
+import FooterNavigation from "../../components/FooterNavigation/FooterNavigation";
+import { useState } from "react";
+import MenuDrawer from "../../components/MenuDrawer/MenuDrawer";
 
 const HomePage = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDrawer = () => setIsOpen(!isOpen);
+
   return (
     <div className="home-container">
-      <Header />
+      <Header toggleDrawer={toggleDrawer}/>
+      <MenuDrawer isOpen={isOpen} toggleDrawer={toggleDrawer}/>
       <section className="event-list">
         <EventCard
           date="10 June"
@@ -24,6 +32,7 @@ const HomePage = () => {
           image="https://s3-alpha-sig.figma.com/img/79e7/4617/a6f523facbd176654d3f7f284b9e9180?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=K6i3biQy5Tza-K0AfXp7bXEh2y6ThnDrBSjXZBIuvNiwAflmJyOzqF02edhnrTowVTKyxS3g0egxW4VojSvAr4GO9fmdlTPBUgKxAqgNZVfH54CvcpSThwD62hpb4jN97rSBUs7TenPl4a5e1n-KvyfiHtTQJTtAdw4tkF9LTITMbHRHUcEhzd85eVvri9RJuUlIRntGYf2TunCKT2l~yGlIRhPW5gwliz9hTEdvYc4SzoRhhYg9q1Hf291F0L5CwxYnr~o7evgRrGelOHPOjyht3my1NRPHmnP0SkKpphhR-7Vo21xOALCnVMM--haLEzbNZKG41CH9LoDv0FGi6A__"
         />
       </section>
+      <FooterNavigation/>
     </div>
   );
 };
