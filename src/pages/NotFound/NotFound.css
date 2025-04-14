@@ -1,0 +1,67 @@
+body {
+    background:#f1f1f1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat';
+  }
+  
+  .phone-container {
+    display:flex;
+    flex-direction: column;
+    max-width: 425px;
+    width: 100%;
+    align-items: space-around;
+    height: 100vh;
+    background-color:  #F59762;
+  }
+  
+  .header {
+    display: flex;
+    background: linear-gradient(#4A43EC, #2A2686);
+    width: inherit;
+    margin: 0;
+    height: 35vh;
+    border-radius: 0 0 50px 50px;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .header-logo {
+    width:220px;
+    height: 220px;
+    background-image: url("@/assets/images/Logo-BigSquared.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .mascot-image {
+    background-image: url("@/assets/images/Mascot.png");
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    width: 400px;
+    height: 400px;
+  }
+
+  .notfound-container h1 {
+    /* font-size: 1.3rem; */
+    font-weight: bold;
+    line-height: 0.5rem;
+  }
+
+  .notfound-container p {
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 0 20px;
+  }
+  
+  .notfound-link {
+    color: black;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-radius: 10px;
+  }
