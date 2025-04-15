@@ -1,0 +1,83 @@
+.menu-toggle {
+    background: none;
+    border: none;
+    font-size: 26px;
+    color: white;
+    margin: 0;
+    cursor: pointer;
+    z-index: 1001;
+    position: relative;
+    filter: invert(1);
+  }
+  
+  .drawer {
+    position: fixed;
+    top: 0;
+    left: calc(50% - (425px / 2));
+    width: 260px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.2);
+    border-radius: 0 30px 30px 0;
+    padding: 20px;
+    z-index: 100002;
+    display: flex;
+    flex-direction: column;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: ease-in-out 0.3s;
+  }
+
+  .drawer-open {
+    transform: scaleX(1);
+    transform-origin: left;
+    transition: ease-in-out 0.3s;
+  }
+  
+  .drawer-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-image: url("@/assets/images/user-avatar.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  
+  .drawer-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .drawer-menu li {
+    padding: 12px 0;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  .drawer-menu li:hover {
+    color: #4A43EC;
+  }
+  
+  .drawer-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 1001;
+  }
+  
