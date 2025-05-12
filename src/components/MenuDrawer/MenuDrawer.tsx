@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../security/AuthContext";
 import "./MenuDrawer.css";
+import { AppRoutes } from "../../types/AppRoutes";
 
 type MenuDrawerProps = {
   isOpen: boolean;
@@ -27,7 +28,7 @@ const MenuDrawer = (props: MenuDrawerProps) => {
           &#9776;
         </button>
         <ul className="drawer-menu">
-          <li>
+          <li onClick={() => nav(AppRoutes.PROFILE)}>
             <span className="icon">👤</span> My Profile
           </li>
           <li>
