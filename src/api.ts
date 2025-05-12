@@ -39,4 +39,22 @@ export function loginUser(payload: { username: string; password: string }) {
   });
 }
 
+export interface EventData {
+  id?: string;
+  title: string;
+  description: string;
+  location: string;
+  date: string;
+  is_promoted: boolean;
+}
+
+export const fetchEventById = (id: string) =>
+  api.get<EventData>(`/events/${id}`).then((r) => r.data);
+
+export const createEvent = (payload: EventData) =>
+  api.post<EventData>(`/events`, payload).then((r) => r.data);
+
+export const updateEvent = (id: string, payload: EventData) =>
+  api.put<EventData>(`/events/${id}`, payload).then((r) => r.data);
+
 export default api;
