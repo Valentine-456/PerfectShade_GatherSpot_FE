@@ -1,23 +1,30 @@
-// src/pages/Auth/Register/Register.tsx
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { AppRoutes } from "../../../types/AppRoutes";
 import { registerUser } from '../../../api';
 import '../auth.css';
 
 const Register = () => {
-  const [userType, setUserType] = useState<'individual'|'organization'>('individual');
   const [username, setUsername] = useState('');
   const [email,    setEmail]    = useState('');
   const [password, setPassword] = useState('');
   const [error,    setError]    = useState<string|null>(null);
+  const [selectedType, setSelectedType] = useState<
+    "individual" | "organization"
+  >("individual");
   const navigate = useNavigate();
+  
+
+  const handleToggle = (type: "individual" | "organization") => {
+    setSelectedType(type);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     try {
-      await registerUser({ username, email, password, user_type: userType });
-      navigate('/login');                            // send them to login next
+      await registerUser({ username, email, password, user_type: selectedType });
+      navigate('/login');
     } catch (err: any) {
       setError(err.response?.data?.message || err.message);
     }
@@ -25,11 +32,33 @@ const Register = () => {
 
   return (
     <div className="phone-container">
-      <header className="auth-header">…</header>
+      <header className="auth-header">
+        <div className="header-logo"></div>
+      </header>
       <form onSubmit={handleSubmit} className="auth-form register-form">
-        <Link to="/login" className="back-arrow">←</Link>
+        <Link to={AppRoutes.LOGIN} className="back-arrow">←</Link>
         <h2>Sign up</h2>
-        {/* toggle buttons omitted for brevity */}
+        <p className="subtext" id="signup-text">
+          {selectedType === "individual"
+            ? "If you are an individual and don’t need any business or advertising features, select individual"
+            : "If you are an organization and want to be verified to get access to advertising and business features, select organization"}
+        </p>
+        <div className="toggle-buttons">
+          <button
+            type="button"
+            className={`toggle ${selectedType === "individual" ? "active" : ""}`}
+            onClick={() => handleToggle("individual")}
+          >
+            Individual
+          </button>
+          <button
+            type="button"
+            className={`toggle ${selectedType === "organization" ? "active" : ""}`}
+            onClick={() => handleToggle("organization")}
+          >
+            Organization
+          </button>
+        </div>
         <input
           type="text"
           name="username"
