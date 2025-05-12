@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import "./NotFound.css";
 
@@ -10,9 +9,11 @@ const NotFound = () => {
       </header>
       <h1>404</h1>
       <p>Our New AI-powered skin tone analysis app is out soon! </p>
-      <Link to="/" className="notfound-link">Stay tuned!</Link>
+      <Link to="/" className="notfound-link">
+        Stay tuned!
+      </Link>
       <div className="mascot-image"></div>
-      </div>
+    </div>
   );
 };
 

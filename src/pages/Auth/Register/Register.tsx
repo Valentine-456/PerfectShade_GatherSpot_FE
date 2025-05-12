@@ -1,19 +1,18 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { AppRoutes } from "../../../types/AppRoutes";
-import { registerUser } from '../../../api';
-import '../auth.css';
+import { registerUser } from "../../../api";
+import "../auth.css";
 
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const [email,    setEmail]    = useState('');
-  const [password, setPassword] = useState('');
-  const [error,    setError]    = useState<string|null>(null);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<
     "individual" | "organization"
   >("individual");
   const navigate = useNavigate();
-  
 
   const handleToggle = (type: "individual" | "organization") => {
     setSelectedType(type);
@@ -23,8 +22,13 @@ const Register = () => {
     e.preventDefault();
     setError(null);
     try {
-      await registerUser({ username, email, password, user_type: selectedType });
-      navigate('/login');
+      await registerUser({
+        username,
+        email,
+        password,
+        user_type: selectedType,
+      });
+      navigate("/login");
     } catch (err: any) {
       setError(err.response?.data?.message || err.message);
     }
@@ -36,7 +40,9 @@ const Register = () => {
         <div className="header-logo"></div>
       </header>
       <form onSubmit={handleSubmit} className="auth-form register-form">
-        <Link to={AppRoutes.LOGIN} className="back-arrow">←</Link>
+        <Link to={AppRoutes.LOGIN} className="back-arrow">
+          ←
+        </Link>
         <h2>Sign up</h2>
         <p className="subtext" id="signup-text">
           {selectedType === "individual"
@@ -64,7 +70,7 @@ const Register = () => {
           name="username"
           placeholder="Username"
           value={username}
-          onChange={e => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           required
         />
         <input
@@ -72,7 +78,7 @@ const Register = () => {
           name="email"
           placeholder="Email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
@@ -80,13 +86,13 @@ const Register = () => {
           name="password"
           placeholder="Password"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
         <button type="submit" className="primary-btn">
           SIGN UP <span className="arrow">➜</span>
         </button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </form>
     </div>
   );
