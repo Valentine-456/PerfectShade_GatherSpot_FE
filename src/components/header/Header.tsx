@@ -4,14 +4,19 @@ import menuIcon from "@/assets/images/menu.png";
 import filterIcon from "@/assets/images/filter.png";
 
 type HeaderProps = {
-  toggleDrawer: () => void
-}
+  toggleDrawer: () => void;
+};
 
 const Header = (props: HeaderProps) => {
   return (
     <div className="header-container">
       <div className="header-top">
-        <img src={menuIcon} alt="Menu" className="icon menu-icon" onClick={props.toggleDrawer}/>
+        <img
+          src={menuIcon}
+          alt="Menu"
+          className="icon menu-icon"
+          onClick={props.toggleDrawer}
+        />
 
         <div className="location-info">
           <span className="label">Current Location</span>

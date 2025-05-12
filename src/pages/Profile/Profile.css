@@ -1,0 +1,161 @@
+/* reuse your globals from auth.css */
+.phone-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 425px;
+    width: 100%;
+    height: 100vh;
+    background-color: #f59762;
+    align-items: center;
+    position: relative;
+    overflow: auto;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  /* the colored top shape behind the card */
+  .profile-topshape {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 35vh;
+    background: linear-gradient(#4A43EC, #2A2686);
+    border-radius: 0 0 50px 50px;
+    z-index: 1;
+  }
+  
+  /* white card container */
+  .profile-card {
+    position: relative;
+    z-index: 2;
+    background: white;
+    border-radius: 25px;
+    width: 80%;
+    padding: 20px;
+    margin-top: 5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 85%;
+  }
+  
+  /* back button */
+  .back-arrow {
+    align-self: flex-start;
+    text-decoration: none;
+    font-size: 1.5em;
+    color: #3D56F0;
+    border: 2px solid #3D56F0;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  /* page title */
+  .profile-card h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #333;
+  }
+  
+  /* avatar */
+  .avatar {
+    margin: 12px 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #eee;
+  }
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* name & username */
+  .profile-card h3 {
+    margin: 4px 0;
+    font-size: 1.2rem;
+  }
+  .username {
+    margin: 0 0 12px;
+    color: #888;
+    font-size: 0.9rem;
+  }
+  
+  /* stats */
+  .stats {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 16px;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .number {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  .label {
+    font-size: 0.8rem;
+    color: #666;
+  }
+  
+  /* edit button */
+  .edit-btn {
+    background: #4a43ec;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 24px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  /* interests header */
+  .interests-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .interests-header span {
+    font-weight: bold;
+  }
+  .change-btn {
+    background: none;
+    border: none;
+    color: #3c1ff4;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+  
+  /* tags */
+  .interests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .interest-tag {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    color: white;
+    background: #4a43ec;
+  }
+  
+  .interest-tag:nth-child(1) { background: #6FCF97; } /* e.g. green */
+  .interest-tag:nth-child(2) { background: #EB5757; } /* red */
+  .interest-tag:nth-child(3) { background: #F2994A; } /* orange */
+  .interest-tag:nth-child(4) { background: #56CCF2; } /* blue */
+  .interest-tag:nth-child(5) { background: #BB6BD9; } /* purple */
+  
