@@ -3,4 +3,6 @@ export enum AppRoutes {
   REGISTER = "/register",
   HOME = "/",
   PROFILE = "/profile",
+  EVENT_CREATE = "/events/new",
+  EVENT_UPDATE = "/events/:id/edit",
 }

@@ -9,6 +9,8 @@ import Register from "./pages/Auth/Register/Register";
 import Home from "./pages/Home/Home";
 import NotFound from "./pages/NotFound/NotFound";
 import Profile from "./pages/Profile/Profile";
+import CreateEvent from "./pages/EventPages/CreateEvent";
+import UpdateEvent from "./pages/EventPages/UpdateEvent";
 
 export default function App() {
   return (
@@ -21,6 +23,8 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route path={AppRoutes.HOME} element={<Home />} />
         <Route path={AppRoutes.PROFILE} element={<Profile />} />
+        <Route path={AppRoutes.EVENT_CREATE} element={<CreateEvent />} />
+        <Route path={AppRoutes.EVENT_UPDATE} element={<UpdateEvent />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
