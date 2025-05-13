@@ -39,4 +39,48 @@ export function loginUser(payload: { username: string; password: string }) {
   });
 }
 
+export interface EventItem {
+  id: number;
+  title: string;
+  description: string;
+  location: string;
+  date: string;            // ISO string
+  is_promoted: boolean;
+  attendees_count: number;
+}
+
+interface EventResponse {
+  success: boolean;
+  message: string;
+  data: EventItem;
+}
+
+interface EventsResponse {
+  success: boolean;
+  message: string;
+  data: EventItem[];
+}
+
+export function getEvents(): Promise<EventItem[]> {
+  return api
+    .get<EventsResponse>("/events")
+    .then((res) => {
+      if (res.data.success) {
+        return res.data.data;
+      }
+      return Promise.reject(new Error(res.data.message));
+    });
+}
+
+export function getEventById(id: string | number): Promise<EventItem> {
+  return api
+    .get<EventResponse>(`/events/${id}`)
+    .then((res) => {
+      if (!res.data.success) {
+        return Promise.reject(new Error(res.data.message));
+      }
+      return res.data.data;
+    });
+}
+
 export default api;

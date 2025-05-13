@@ -9,6 +9,7 @@ import Register from "./pages/Auth/Register/Register";
 import Home from "./pages/Home/Home";
 import NotFound from "./pages/NotFound/NotFound";
 import Profile from "./pages/Profile/Profile";
+import EventDetails from "./pages/EventDetails/EventDetails";
 
 export default function App() {
   return (
@@ -21,9 +22,10 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route path={AppRoutes.HOME} element={<Home />} />
         <Route path={AppRoutes.PROFILE} element={<Profile />} />
+        <Route path={AppRoutes.EVENT_DETAILS} element={<EventDetails />} />
       </Route>
 
-      <Route path="*" element={<NotFound />} />
+      <Route path={AppRoutes.NOT_FOUND} element={<NotFound />} />
     </Routes>
   );
 }
