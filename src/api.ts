@@ -57,4 +57,20 @@ export const createEvent = (payload: EventData) =>
 export const updateEvent = (id: string, payload: EventData) =>
   api.put<EventData>(`/events/${id}`, payload).then((r) => r.data);
 
+export interface EventSummary {
+  id: number;
+  title: string;
+  description: string;
+  location: string;
+  date: string;
+  is_promoted: boolean;
+  attendees_count: number;
+}
+
+export function fetchEvents(): Promise<EventSummary[]> {
+  return api
+    .get<{ data: EventSummary[] }>("/events")
+    .then((res) => res.data.data);
+}
+
 export default api;
