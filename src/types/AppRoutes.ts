@@ -5,4 +5,5 @@ export enum AppRoutes {
   PROFILE = "/profile",
   EVENT_CREATE = "/events/new",
   EVENT_UPDATE = "/events/:id/edit",
+  EVENT_VIEW = "/events/:id/view",
 }

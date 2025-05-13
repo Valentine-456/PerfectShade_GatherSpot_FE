@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./EventCard.css";
+import { useNavigate } from "react-router-dom";
 
 interface EventCardProps {
   date: string;
@@ -8,6 +9,7 @@ interface EventCardProps {
   location: string;
   icon?: string;
   image: string;
+  id: string;
 }
 
 const EventCard = ({
@@ -17,6 +19,7 @@ const EventCard = ({
   location,
   icon,
   image,
+  id
 }: EventCardProps) => {
   const IMAGES = [
     "https://cdn.pixabay.com/photo/2017/12/08/11/53/event-party-3005668_1280.jpg",
@@ -34,9 +37,10 @@ const EventCard = ({
   }
 
   const [bannerUrl] = useState(getRandomImageUrl);
+  const navigate = useNavigate();
 
   return (
-    <div className="event-card">
+    <div className="event-card" onClick={() => navigate('/events/' + id + "/view")}>
       <div
         className="event-img"
         style={{ backgroundImage: `url(${bannerUrl})` }}

@@ -73,4 +73,7 @@ export function fetchEvents(): Promise<EventSummary[]> {
     .then((res) => res.data.data);
 }
 
+export function getEvent(id: number): Promise<EventSummary> {
+  return axios.get<EventSummary>(`/events/${id}`).then(r => r.data);
+}
 export default api;
