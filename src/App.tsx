@@ -12,6 +12,7 @@ import Profile from "./pages/Profile/Profile";
 import EventDetails from "./pages/EventDetails/EventDetails";
 import CreateEvent from "./pages/EventPages/CreateEvent";
 import UpdateEvent from "./pages/EventPages/UpdateEvent";
+import ViewEvent from "./pages/EventPages/ViewEvent";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
         <Route path={AppRoutes.EVENT_DETAILS} element={<EventDetails />} />
         <Route path={AppRoutes.EVENT_CREATE} element={<CreateEvent />} />
         <Route path={AppRoutes.EVENT_UPDATE} element={<UpdateEvent />} />
+        <Route path={AppRoutes.EVENT_VIEW} element={<ViewEvent />} />
       </Route>
 
       <Route path={AppRoutes.NOT_FOUND} element={<NotFound />} />
