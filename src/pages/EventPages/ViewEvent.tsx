@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getEvent, EventSummary } from '../../api';
+import EventIcon from "@/assets/images/party.png";
+import PromotedEventIcon from "@/assets/images/star.png";
+import LocationIcon from "@/assets/images/map.png"
+import CalendarIcon from "@/assets/images/calendar.png"
 import './ViewEvent.css';
 
 export default function ViewEvent() {
@@ -28,6 +32,7 @@ const IMAGES = [
     if (!id) return;
     getEvent(+id).then(e => {
       setEvent(e);
+      console.log(e);
       setBannerUrl(getRandomImageUrl());
     });
   }, [id]);
@@ -72,19 +77,21 @@ const IMAGES = [
 
         <div className="event-meta">
           <div className="meta-item">
-            <div className="meta-icon calendar" />
+            <img src={CalendarIcon} className="meta-icon" />
             <div>
               <div className="meta-label">{dateStr}</div>
               <div className="meta-sub">{timeStr}</div>
             </div>
           </div>
           <div className="meta-item">
-            <div className="meta-icon location" />
+            <img src={LocationIcon} className="meta-icon location-icon" />
             <div className="meta-label">{event.location}</div>
           </div>
-          {event.is_promoted && (
-            <div className="promo-badge">Promoted</div>
-          )}
+            <div className='meta-item'>
+              <img src={event.is_promoted ? PromotedEventIcon : EventIcon} alt="icon" className="meta-icon" />
+              {event.is_promoted && (<div className="promo-badge">Promoted</div>)}
+            </div>
+          
         </div>
 
         <h3 className="section-title">About Event</h3>
