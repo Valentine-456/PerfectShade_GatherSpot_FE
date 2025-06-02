@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getEvent, EventSummary } from '../../api';
-import './ViewEvent.css';
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getEventById as getEvent, EventSummary } from "../../api";
+import "./ViewEvent.css";
 
 export default function ViewEvent() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [event, setEvent] = useState<EventSummary|null>(null);
-  const [bannerUrl, setBannerUrl] = useState<string>('');
+  const [event, setEvent] = useState<EventSummary | null>(null);
+  const [bannerUrl, setBannerUrl] = useState<string>("");
 
-const IMAGES = [
+  const IMAGES = [
     "https://cdn.pixabay.com/photo/2017/12/08/11/53/event-party-3005668_1280.jpg",
     "https://marketing-cdn.tickettailor.com/ZgP1j7LRO5ile62O_HowdoyouhostasmallcommunityeventA10-stepguide%2CMiniflagsattheevent.jpg?auto=format,compress",
     "https://cdn-cjhkj.nitrocdn.com/krXSsXVqwzhduXLVuGLToUwHLNnSxUxO/assets/images/optimized/rev-a4983f2/spotme.com/wp-content/uploads/2020/07/Hero-1.jpg",
@@ -23,10 +23,9 @@ const IMAGES = [
     return IMAGES[idx];
   }
 
-
   useEffect(() => {
     if (!id) return;
-    getEvent(+id).then(e => {
+    getEvent(+id).then((e) => {
       setEvent(e);
       setBannerUrl(getRandomImageUrl());
     });
@@ -42,11 +41,19 @@ const IMAGES = [
 
   const when = new Date(event.date);
   const dateStr = when.toLocaleDateString(undefined, {
-    day: 'numeric', month: 'long', year: 'numeric'
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
   const timeStr = when.toLocaleTimeString(undefined, {
-    hour: 'numeric', minute: '2-digit'
+    hour: "numeric",
+    minute: "2-digit",
   });
+
+  const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
+  const { latitude, longitude } = event;
+  const centerParam = `${latitude},${longitude}`;
+  console.log("Center param going to Google:", centerParam);
 
   return (
     <div className="phone-container">
@@ -66,9 +73,7 @@ const IMAGES = [
         </div>
 
         <h2 className="event-title">{event.title}</h2>
-        <span className="event-going">
-          Going {event.attendees_count}
-        </span>
+        <span className="event-going">Going {event.attendees_count}</span>
 
         <div className="event-meta">
           <div className="meta-item">
@@ -82,13 +87,28 @@ const IMAGES = [
             <div className="meta-icon location" />
             <div className="meta-label">{event.location}</div>
           </div>
-          {event.is_promoted && (
-            <div className="promo-badge">Promoted</div>
-          )}
+          {event.is_promoted && <div className="promo-badge">Promoted</div>}
         </div>
 
         <h3 className="section-title">About Event</h3>
         <p className="about-text">{event.description}</p>
+
+        <div className="map-container">
+          <iframe
+            title="Event Location"
+            width="100%"
+            height="250"
+            style={{ border: 0, borderRadius: 8 }}
+            loading="lazy"
+            allowFullScreen
+            src={
+              `https://www.google.com/maps/embed/v1/view?` +
+              `key=${googleMapsApiKey}` +
+              `&center=${event.latitude},${event.longitude}` +
+              `&zoom=15`
+            }
+          ></iframe>
+        </div>
 
         <div className="view-action-buttons">
           <button className="outline-btn">Invite</button>

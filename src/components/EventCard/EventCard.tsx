@@ -19,7 +19,7 @@ const EventCard = ({
   location,
   icon,
   image,
-  id
+  id,
 }: EventCardProps) => {
   const IMAGES = [
     "https://cdn.pixabay.com/photo/2017/12/08/11/53/event-party-3005668_1280.jpg",
@@ -40,7 +40,10 @@ const EventCard = ({
   const navigate = useNavigate();
 
   return (
-    <div className="event-card" onClick={() => navigate('/events/' + id + "/view")}>
+    <div
+      className="event-card"
+      onClick={() => navigate("/events/" + id + "/view")}
+    >
       <div
         className="event-img"
         style={{ backgroundImage: `url(${bannerUrl})` }}

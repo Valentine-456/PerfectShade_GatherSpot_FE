@@ -8,4 +8,5 @@ export enum AppRoutes {
   EVENT_CREATE = "/events/new",
   EVENT_UPDATE = "/events/:id/edit",
   EVENT_VIEW = "/events/:id/view",
+  MAP = "/map",
 }
