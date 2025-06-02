@@ -4,7 +4,7 @@ import Header from "../../components/header/Header";
 import FooterNavigation from "../../components/FooterNavigation/FooterNavigation";
 import { useEffect, useState } from "react";
 import MenuDrawer from "../../components/MenuDrawer/MenuDrawer";
-import { fetchEvents } from "../../api";
+import { EventSummary, fetchEvents } from "../../api";
 import EventIcon from "@/assets/images/party.png";
 import PromotedEventIcon from "@/assets/images/star.png";
 
@@ -14,23 +14,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const toggleDrawer = () => setIsOpen(!isOpen);
-  const [events, setEvents] = useState<EventItem[]>([]);
 
-  useEffect(() => {
-    getEvents()
-      .then((data) => setEvents(data))
-      .catch((err) => {
-        console.error("Could not load events:", err);
-      });
-  }, []);
-
-  const formatDate = (iso: string) => {
-    const d = new Date(iso);
-    const day = d.getDate();
-    const month = d.toLocaleString("default", { month: "short" });
-    const year = d.getFullYear();
-    return `${day} ${month}, ${year}`;
-  };
 
   useEffect(() => {
     fetchEvents()
