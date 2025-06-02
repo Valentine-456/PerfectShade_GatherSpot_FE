@@ -4,16 +4,17 @@ import Header from "../../components/header/Header";
 import FooterNavigation from "../../components/FooterNavigation/FooterNavigation";
 import { useEffect, useState } from "react";
 import MenuDrawer from "../../components/MenuDrawer/MenuDrawer";
-import { fetchEvents } from "../../api";
+import { EventSummary, fetchEvents } from "../../api";
 import EventIcon from "@/assets/images/party.png";
 import PromotedEventIcon from "@/assets/images/star.png";
 
-const HomePage = () => {
+export default function HomePage() {
   const [isOpen, setIsOpen] = useState(false);
   const [events, setEvents] = useState<EventSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const toggleDrawer = () => setIsOpen(!isOpen);
+
 
   useEffect(() => {
     fetchEvents()
@@ -30,8 +31,9 @@ const HomePage = () => {
 
   return (
     <div className="home-container">
-      <Header toggleDrawer={toggleDrawer} />
-      <MenuDrawer isOpen={isOpen} toggleDrawer={toggleDrawer} />
+      <Header toggleDrawer={() => setIsOpen((o) => !o)} />
+      <MenuDrawer isOpen={isOpen} toggleDrawer={() => setIsOpen((o) => !o)} />
+
       <section className="event-list">
         {loading && <p>Loading events…</p>}
         {error && <p style={{ color: "red" }}>{error}</p>}
@@ -51,11 +53,11 @@ const HomePage = () => {
             id={ev.id}
             image="https://cdn-cjhkj.nitrocdn.com/krXSsXVqwzhduXLVuGLToUwHLNnSxUxO/assets/images/optimized/rev-a4983f2/spotme.com/wp-content/uploads/2020/07/Hero-1.jpg"
           />
+
         ))}
       </section>
+
       <FooterNavigation />
     </div>
   );
-};
-
-export default HomePage;
+}
