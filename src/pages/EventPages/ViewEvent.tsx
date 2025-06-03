@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getEvent, EventSummary } from '../../api';
+import { getEvent, EventSummary, toggleRsvpEvent } from '../../api';
 import EventIcon from "@/assets/images/party.png";
 import PromotedEventIcon from "@/assets/images/star.png";
 import LocationIcon from "@/assets/images/map.png"
@@ -53,6 +53,12 @@ const IMAGES = [
     hour: 'numeric', minute: '2-digit'
   });
 
+  const rsvpHandler = async () => {
+    const rsvp = await toggleRsvpEvent(+id!!);
+    alert(rsvp.message);
+    navigate(0);
+  }
+
   return (
     <div className="phone-container">
       <div className="profile-topshape" />
@@ -102,8 +108,8 @@ const IMAGES = [
           <button className="outline-btn">Share</button>
         </div>
 
-        <button className="primary-btn buy-btn">
-          Buy Ticket <span className="arrow">➜</span>
+        <button onClick={rsvpHandler} className="primary-btn buy-btn">
+          Buy/Return Ticket <span className="arrow">➜</span>
         </button>
       </div>
     </div>

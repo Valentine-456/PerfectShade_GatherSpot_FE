@@ -85,12 +85,14 @@
 .event-meta {
   width: 100%;
   margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .meta-item {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
 }
 
 .meta-icon {
