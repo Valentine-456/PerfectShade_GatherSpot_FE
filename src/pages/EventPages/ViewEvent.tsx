@@ -1,7 +1,11 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getEventById as getEvent, EventSummary } from "../../api";
-import "./ViewEvent.css";
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getEventById as getEvent, EventSummary, toggleRsvpEvent } from '../../api';
+import EventIcon from "@/assets/images/party.png";
+import PromotedEventIcon from "@/assets/images/star.png";
+import LocationIcon from "@/assets/images/map.png"
+import CalendarIcon from "@/assets/images/calendar.png"
+import './ViewEvent.css';
 
 export default function ViewEvent() {
   const { id } = useParams<{ id: string }>();
@@ -27,6 +31,7 @@ export default function ViewEvent() {
     if (!id) return;
     getEvent(+id).then((e) => {
       setEvent(e);
+      console.log(e);
       setBannerUrl(getRandomImageUrl());
     });
   }, [id]);
@@ -50,8 +55,21 @@ export default function ViewEvent() {
     minute: "2-digit",
   });
 
+
+  const rsvpHandler = async () => {
+    const rsvp = await toggleRsvpEvent(+id!!);
+    alert(rsvp.message);
+    navigate(0);
+  }
+
   const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
-  const { latitude, longitude } = event;
+  
+  const defaultLat = 52.2297;
+  const defaultLng = 21.0122;
+
+  const latitude = event?.latitude ?? defaultLat;
+  const longitude = event?.longitude ?? defaultLng;
+
   const centerParam = `${latitude},${longitude}`;
   console.log("Center param going to Google:", centerParam);
 
@@ -77,17 +95,20 @@ export default function ViewEvent() {
 
         <div className="event-meta">
           <div className="meta-item">
-            <div className="meta-icon calendar" />
+            <img src={CalendarIcon} className="meta-icon" />
             <div>
               <div className="meta-label">{dateStr}</div>
               <div className="meta-sub">{timeStr}</div>
             </div>
           </div>
           <div className="meta-item">
-            <div className="meta-icon location" />
+            <img src={LocationIcon} className="meta-icon location-icon" />
             <div className="meta-label">{event.location}</div>
           </div>
-          {event.is_promoted && <div className="promo-badge">Promoted</div>}
+            <div className='meta-item'>
+              <img src={event.is_promoted ? PromotedEventIcon : EventIcon} alt="icon" className="meta-icon" />
+              {event.is_promoted && (<div className="promo-badge">Promoted</div>)}
+            </div>
         </div>
 
         <h3 className="section-title">About Event</h3>
@@ -115,8 +136,8 @@ export default function ViewEvent() {
           <button className="outline-btn">Share</button>
         </div>
 
-        <button className="primary-btn buy-btn">
-          Buy Ticket <span className="arrow">➜</span>
+        <button onClick={rsvpHandler} className="primary-btn buy-btn">
+          Buy/Return Ticket <span className="arrow">➜</span>
         </button>
       </div>
     </div>

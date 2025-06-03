@@ -22,6 +22,11 @@ export interface AuthResponse {
   };
 }
 
+export interface RsvpResponse {
+  success: boolean;
+  message: string;
+}
+
 export function registerUser(payload: {
   username: string;
   email: string;
@@ -121,6 +126,11 @@ export function fetchEvents(): Promise<EventSummary[]> {
 }
 
 export function getEvent(id: number): Promise<EventSummary> {
-  return axios.get<EventSummary>(`/events/${id}`).then(r => r.data);
+  return api.get<any>(`/events/${id}`).then(r => r.data.data);
 }
+
+export function toggleRsvpEvent(id: number): Promise<RsvpResponse> {
+  return api.post<RsvpResponse>(`/events/${id}/rsvp/`).then(r => r.data);
+}
+
 export default api;
