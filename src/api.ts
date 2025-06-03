@@ -96,6 +96,8 @@ export interface EventData {
   location: string;
   date: string;
   is_promoted: boolean;
+  latitude?: number;
+  longitude?: number;
 }
 
 export const fetchEventById = (id: string) =>

@@ -6,6 +6,7 @@ import PromotedEventIcon from "@/assets/images/star.png";
 import LocationIcon from "@/assets/images/map.png"
 import CalendarIcon from "@/assets/images/calendar.png"
 import './ViewEvent.css';
+import { useJsApiLoader, GoogleMap, Marker } from '@react-google-maps/api';
 
 export default function ViewEvent() {
   const { id } = useParams<{ id: string }>();
@@ -26,6 +27,10 @@ export default function ViewEvent() {
     const idx = Math.floor(Math.random() * IMAGES.length);
     return IMAGES[idx];
   }
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+  });
 
   useEffect(() => {
     if (!id) return;
@@ -61,8 +66,6 @@ export default function ViewEvent() {
     alert(rsvp.message);
     navigate(0);
   }
-
-  const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
   
   const defaultLat = 52.2297;
   const defaultLng = 21.0122;
@@ -115,20 +118,23 @@ export default function ViewEvent() {
         <p className="about-text">{event.description}</p>
 
         <div className="map-container">
-          <iframe
-            title="Event Location"
-            width="100%"
-            height="250"
-            style={{ border: 0, borderRadius: 8 }}
-            loading="lazy"
-            allowFullScreen
-            src={
-              `https://www.google.com/maps/embed/v1/view?` +
-              `key=${googleMapsApiKey}` +
-              `&center=${event.latitude},${event.longitude}` +
-              `&zoom=15`
-            }
-          ></iframe>
+          {!isLoaded && <p>Loading Map…</p>}
+          {isLoaded && (
+            <GoogleMap
+              mapContainerStyle={{ width: "100%", height: "250px", borderRadius: 8 }}
+              center={{ lat: latitude, lng: longitude }}
+              zoom={15}
+              options={{
+                disableDefaultUI: false,
+                gestureHandling: "none",
+                zoomControl: true,
+                draggable: true,
+                clickableIcons: false,
+              }}
+            >
+              <Marker position={{ lat: latitude, lng: longitude }} clickable={false} />
+            </GoogleMap>
+          )}
         </div>
 
         <div className="view-action-buttons">

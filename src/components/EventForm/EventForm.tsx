@@ -1,6 +1,7 @@
 import { useState, FormEvent } from "react";
 import { EventData, createEvent, updateEvent } from "../../api";
 import { useNavigate } from "react-router-dom";
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import "./EventForm.css";
 
 interface EventFormProps {
@@ -16,10 +17,17 @@ export default function EventForm({ initialData, mode }: EventFormProps) {
       description: "",
       location: "",
       date: "",
+      latitude: 52.2297,
+      longitude: 21.0122,
       is_promoted: false,
     },
   );
   const [saving, setSaving] = useState(false);
+
+  const center = { lat: form.latitude!!, lng: form.longitude!! };
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+  });
 
   const onChange =
     <K extends keyof EventData>(key: K) =>
@@ -114,6 +122,31 @@ export default function EventForm({ initialData, mode }: EventFormProps) {
           />
           Promote this event
         </label>
+
+        <div className="map-wrapper">
+          <h4>Pick Event Location</h4>
+          <div className="map-frame-container">
+            {isLoaded && (
+                <GoogleMap
+                  mapContainerStyle={{ width: '100%', height: '250px', borderRadius: '8px' }}
+                  center={center}
+                  zoom={14}
+                  onClick={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      latitude: e.latLng?.lat() ?? f.latitude,
+                      longitude: e.latLng?.lng() ?? f.longitude,
+                    }))
+                  }
+                >
+                  <Marker position={center} />
+                </GoogleMap>
+              )}
+            <p className="location-coords">
+              Lat: {form.latitude?.toFixed(4)}, Lng: {form.longitude?.toFixed(4)}
+            </p>
+          </div>
+        </div>
 
         <button type="submit" className="primary-btn" disabled={saving}>
           {mode === "create" ? "Create" : "Save"}

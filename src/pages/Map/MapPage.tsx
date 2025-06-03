@@ -1,17 +1,17 @@
-// src/pages/EventPages/MapPage.tsx
-
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 import Header from "../../components/header/Header";
 import MenuDrawer from "../../components/MenuDrawer/MenuDrawer";
 import FooterNavigation from "../../components/FooterNavigation/FooterNavigation";
 import { fetchEvents, EventSummary } from "../../api";
 import "./MapPage.css";
+import { useNavigate } from "react-router-dom";
 
 export default function MapPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [events, setEvents] = useState<EventSummary[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
+  const navigate = useNavigate();
 
   // Read your Maps API key from Vite env
   const googleMapsApiKey = import.meta.env
@@ -40,7 +40,7 @@ export default function MapPage() {
         lat: events.reduce((sum, e) => sum + e.latitude, 0) / events.length,
         lng: events.reduce((sum, e) => sum + e.longitude, 0) / events.length,
       }
-    : { lat: 0, lng: 0 };
+    : { lat: 52.2297, lng: 21.0122 };
 
   // 4) Show errors or loading states as needed
   if (loadError) {
@@ -79,6 +79,7 @@ export default function MapPage() {
                 key={e.id}
                 position={{ lat: e.latitude, lng: e.longitude }}
                 title={e.title}
+                onClick={() => navigate(`/events/${e.id}/view`)}
               />
             ))}
           </GoogleMap>

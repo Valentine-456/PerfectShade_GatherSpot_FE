@@ -12,7 +12,7 @@ import Profile from "./pages/Profile/Profile";
 import CreateEvent from "./pages/EventPages/CreateEvent";
 import UpdateEvent from "./pages/EventPages/UpdateEvent";
 import ViewEvent from "./pages/EventPages/ViewEvent";
-import MapPage from "./pages/EventPages/MapPage";
+import MapPage from "./pages/Map/MapPage";
 
 export default function App() {
   return (

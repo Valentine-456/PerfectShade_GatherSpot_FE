@@ -28,8 +28,8 @@
 */
 .map-content {
   position: absolute;
-  top: 35vh;     /* exactly where the bottom of the header sits */
-  bottom: 65px;  /* exactly where the top of the footer sits */
+  top: 10vh;     /* exactly where the bottom of the header sits */
+  bottom: 0;  /* exactly where the top of the footer sits */
   left: 0;
   right: 0;
   display: flex;

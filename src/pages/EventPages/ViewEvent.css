@@ -1,4 +1,3 @@
-/* reuse globals from auth.css and Profile.css */
 .phone-container {
   display: flex;
   flex-direction: column;
@@ -37,6 +36,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 80%;
+  overflow-x: auto;
   transform: translateY(-15%);
 }
 
@@ -59,11 +60,10 @@
 }
 
 /* banner image */
-.event-banner {
+.profile-card.view-event-card .event-banner {
   width: 100%;
   height: 160px;
   border-radius: 16px;
-  overflow: hidden;
   margin-bottom: 12px;
 }
 .event-banner img {
