@@ -1,6 +1,7 @@
 // src/pages/EventPages/MapPage.tsx
-import React, { useState, useEffect, useRef } from "react";
-import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
+
+import React, { useState, useEffect } from "react";
+import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 import Header from "../../components/header/Header";
 import MenuDrawer from "../../components/MenuDrawer/MenuDrawer";
 import FooterNavigation from "../../components/FooterNavigation/FooterNavigation";
@@ -10,13 +11,18 @@ import "./MapPage.css";
 export default function MapPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [events, setEvents] = useState<EventSummary[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingEvents, setLoadingEvents] = useState(true);
 
-  // Store a ref to hold whether we have already loaded <LoadScript>
-  const hasLoadedScript = useRef<boolean>(false);
+  // Read your Maps API key from Vite env
+  const googleMapsApiKey = import.meta.env
+    .VITE_GOOGLE_MAPS_API_KEY as string;
 
-  const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
+  // 1) Load the Google Maps JS API with the hook
+  const { isLoaded: mapsLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey,
+  });
 
+  // 2) Fetch all events (with lat/lng) from your backend
   useEffect(() => {
     fetchEvents()
       .then((data) => {
@@ -25,12 +31,10 @@ export default function MapPage() {
       .catch((err) => {
         console.error("Failed to fetch events for map:", err);
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoadingEvents(false));
   }, []);
 
-  // Compute center (average or fallback)
+  // 3) Compute a center based on event coordinates (or fallback)
   const defaultCenter = events.length
     ? {
         lat: events.reduce((sum, e) => sum + e.latitude, 0) / events.length,
@@ -38,65 +42,37 @@ export default function MapPage() {
       }
     : { lat: 0, lng: 0 };
 
-  // before rendering, detect if `window.google` is already present
-  // so we don’t load the script twice
-  const shouldLoadScript =
-    typeof window !== "undefined" && !window.google && !hasLoadedScript.current;
-
-  if (shouldLoadScript) {
-    hasLoadedScript.current = true;
+  // 4) Show errors or loading states as needed
+  if (loadError) {
+    return (
+      <div className="map-page-container">
+        <Header toggleDrawer={() => setIsOpen((o) => !o)} />
+        <MenuDrawer isOpen={isOpen} toggleDrawer={() => setIsOpen((o) => !o)} />
+        <div className="map-content">
+          <p className="map-loading">
+            Error loading Google Maps. Please try again later.
+          </p>
+        </div>
+        <FooterNavigation />
+      </div>
+    );
   }
-
-  // This function is called when the map is first initialized
-  const onMapLoad = (mapInstance: google.maps.Map) => {
-    // If you decide to migrate to AdvancedMarkerElement, you could set them here:
-    //   events.forEach(e => {
-    //     new google.maps.marker.AdvancedMarkerElement({ map: mapInstance, position: { lat: e.latitude, lng: e.longitude }, title: e.title });
-    //   });
-    //
-    // For now, we’re still using <Marker> below, so nothing special required here.
-  };
 
   return (
     <div className="map-page-container">
-      {/* ========== HEADER ========== */}
+      {/* HEADER (absolute, 35vh tall) */}
       <Header toggleDrawer={() => setIsOpen((o) => !o)} />
       <MenuDrawer isOpen={isOpen} toggleDrawer={() => setIsOpen((o) => !o)} />
 
-      {/* ========== MAIN: map-content ========== */}
+      {/* MAIN CONTENT: absolutely fills from top:35vh to bottom:65px */}
       <div className="map-content">
-        {loading ? (
+        {(!mapsLoaded || loadingEvents) ? (
           <p className="map-loading">Loading map…</p>
-        ) : shouldLoadScript ? (
-          // If `window.google` is _not_ present, we load the script
-          <LoadScript
-            googleMapsApiKey={googleMapsApiKey}
-            onLoad={() => {
-              console.log("Google Maps script loaded.");
-            }}
-          >
-            <GoogleMap
-              mapContainerClassName="map-container"
-              center={defaultCenter}
-              zoom={events.length ? 10 : 2}
-              onLoad={onMapLoad}
-            >
-              {events.map((e) => (
-                <Marker
-                  key={e.id}
-                  position={{ lat: e.latitude, lng: e.longitude }}
-                  title={e.title}
-                />
-              ))}
-            </GoogleMap>
-          </LoadScript>
         ) : (
-          // If `window.google` already exists, just render <GoogleMap> directly
           <GoogleMap
             mapContainerClassName="map-container"
             center={defaultCenter}
             zoom={events.length ? 10 : 2}
-            onLoad={onMapLoad}
           >
             {events.map((e) => (
               <Marker
@@ -109,7 +85,7 @@ export default function MapPage() {
         )}
       </div>
 
-      {/* ========== FOOTER ========== */}
+      {/* FOOTER (fixed 65px tall) */}
       <FooterNavigation />
     </div>
   );
