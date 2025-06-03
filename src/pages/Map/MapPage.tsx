@@ -14,8 +14,7 @@ export default function MapPage() {
   const navigate = useNavigate();
 
   // Read your Maps API key from Vite env
-  const googleMapsApiKey = import.meta.env
-    .VITE_GOOGLE_MAPS_API_KEY as string;
+  const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
 
   // 1) Load the Google Maps JS API with the hook
   const { isLoaded: mapsLoaded, loadError } = useJsApiLoader({
@@ -66,7 +65,7 @@ export default function MapPage() {
 
       {/* MAIN CONTENT: absolutely fills from top:35vh to bottom:65px */}
       <div className="map-content">
-        {(!mapsLoaded || loadingEvents) ? (
+        {!mapsLoaded || loadingEvents ? (
           <p className="map-loading">Loading map…</p>
         ) : (
           <GoogleMap

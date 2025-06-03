@@ -1,7 +1,7 @@
 import { useState, FormEvent } from "react";
 import { EventData, createEvent, updateEvent } from "../../api";
 import { useNavigate } from "react-router-dom";
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import "./EventForm.css";
 
 interface EventFormProps {
@@ -127,23 +127,28 @@ export default function EventForm({ initialData, mode }: EventFormProps) {
           <h4>Pick Event Location</h4>
           <div className="map-frame-container">
             {isLoaded && (
-                <GoogleMap
-                  mapContainerStyle={{ width: '100%', height: '250px', borderRadius: '8px' }}
-                  center={center}
-                  zoom={14}
-                  onClick={(e) =>
-                    setForm((f) => ({
-                      ...f,
-                      latitude: e.latLng?.lat() ?? f.latitude,
-                      longitude: e.latLng?.lng() ?? f.longitude,
-                    }))
-                  }
-                >
-                  <Marker position={center} />
-                </GoogleMap>
-              )}
+              <GoogleMap
+                mapContainerStyle={{
+                  width: "100%",
+                  height: "250px",
+                  borderRadius: "8px",
+                }}
+                center={center}
+                zoom={14}
+                onClick={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    latitude: e.latLng?.lat() ?? f.latitude,
+                    longitude: e.latLng?.lng() ?? f.longitude,
+                  }))
+                }
+              >
+                <Marker position={center} />
+              </GoogleMap>
+            )}
             <p className="location-coords">
-              Lat: {form.latitude?.toFixed(4)}, Lng: {form.longitude?.toFixed(4)}
+              Lat: {form.latitude?.toFixed(4)}, Lng:{" "}
+              {form.longitude?.toFixed(4)}
             </p>
           </div>
         </div>

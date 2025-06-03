@@ -49,10 +49,9 @@ export interface EventItem {
   title: string;
   description: string;
   location: string;
-  date: string;            // ISO string
+  date: string; // ISO string
   is_promoted: boolean;
   attendees_count: number;
-  
 }
 
 interface EventResponse {
@@ -68,25 +67,21 @@ interface EventsResponse {
 }
 
 export function getEvents(): Promise<EventItem[]> {
-  return api
-    .get<EventsResponse>("/events")
-    .then((res) => {
-      if (res.data.success) {
-        return res.data.data;
-      }
-      return Promise.reject(new Error(res.data.message));
-    });
+  return api.get<EventsResponse>("/events").then((res) => {
+    if (res.data.success) {
+      return res.data.data;
+    }
+    return Promise.reject(new Error(res.data.message));
+  });
 }
 
 export function getEventById(id: string | number): Promise<EventItem> {
-  return api
-    .get<EventResponse>(`/events/${id}`)
-    .then((res) => {
-      if (!res.data.success) {
-        return Promise.reject(new Error(res.data.message));
-      }
-      return res.data.data;
-    });
+  return api.get<EventResponse>(`/events/${id}`).then((res) => {
+    if (!res.data.success) {
+      return Promise.reject(new Error(res.data.message));
+    }
+    return res.data.data;
+  });
 }
 
 export interface EventData {
@@ -117,8 +112,8 @@ export interface EventSummary {
   date: string;
   is_promoted: boolean;
   attendees_count: number;
-  latitude: number;        // ← new
-  longitude: number;       // ← new
+  latitude: number; // ← new
+  longitude: number; // ← new
 }
 
 export function fetchEvents(): Promise<EventSummary[]> {
@@ -128,11 +123,11 @@ export function fetchEvents(): Promise<EventSummary[]> {
 }
 
 export function getEvent(id: number): Promise<EventSummary> {
-  return api.get<any>(`/events/${id}`).then(r => r.data.data);
+  return api.get<any>(`/events/${id}`).then((r) => r.data.data);
 }
 
 export function toggleRsvpEvent(id: number): Promise<RsvpResponse> {
-  return api.post<RsvpResponse>(`/events/${id}/rsvp/`).then(r => r.data);
+  return api.post<RsvpResponse>(`/events/${id}/rsvp/`).then((r) => r.data);
 }
 
 export default api;
