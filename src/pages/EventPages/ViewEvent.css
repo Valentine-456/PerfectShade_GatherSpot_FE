@@ -21,6 +21,10 @@
   border-radius: 0 0 50px 50px;
   z-index: 1;
 }
+.map-container {
+  margin: 24px 0;
+  width: 100%;
+}
 
 .profile-card.view-event-card {
   position: relative;

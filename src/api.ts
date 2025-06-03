@@ -52,6 +52,7 @@ export interface EventItem {
   date: string;            // ISO string
   is_promoted: boolean;
   attendees_count: number;
+  
 }
 
 interface EventResponse {
@@ -114,6 +115,8 @@ export interface EventSummary {
   date: string;
   is_promoted: boolean;
   attendees_count: number;
+  latitude: number;        // ← new
+  longitude: number;       // ← new
 }
 
 export function fetchEvents(): Promise<EventSummary[]> {

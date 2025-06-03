@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getEvent, EventSummary, toggleRsvpEvent } from '../../api';
+import { getEventById as getEvent, EventSummary, toggleRsvpEvent } from '../../api';
 import EventIcon from "@/assets/images/party.png";
 import PromotedEventIcon from "@/assets/images/star.png";
 import LocationIcon from "@/assets/images/map.png"
@@ -10,10 +10,10 @@ import './ViewEvent.css';
 export default function ViewEvent() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [event, setEvent] = useState<EventSummary|null>(null);
-  const [bannerUrl, setBannerUrl] = useState<string>('');
+  const [event, setEvent] = useState<EventSummary | null>(null);
+  const [bannerUrl, setBannerUrl] = useState<string>("");
 
-const IMAGES = [
+  const IMAGES = [
     "https://cdn.pixabay.com/photo/2017/12/08/11/53/event-party-3005668_1280.jpg",
     "https://marketing-cdn.tickettailor.com/ZgP1j7LRO5ile62O_HowdoyouhostasmallcommunityeventA10-stepguide%2CMiniflagsattheevent.jpg?auto=format,compress",
     "https://cdn-cjhkj.nitrocdn.com/krXSsXVqwzhduXLVuGLToUwHLNnSxUxO/assets/images/optimized/rev-a4983f2/spotme.com/wp-content/uploads/2020/07/Hero-1.jpg",
@@ -27,10 +27,9 @@ const IMAGES = [
     return IMAGES[idx];
   }
 
-
   useEffect(() => {
     if (!id) return;
-    getEvent(+id).then(e => {
+    getEvent(+id).then((e) => {
       setEvent(e);
       console.log(e);
       setBannerUrl(getRandomImageUrl());
@@ -47,17 +46,32 @@ const IMAGES = [
 
   const when = new Date(event.date);
   const dateStr = when.toLocaleDateString(undefined, {
-    day: 'numeric', month: 'long', year: 'numeric'
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
   const timeStr = when.toLocaleTimeString(undefined, {
-    hour: 'numeric', minute: '2-digit'
+    hour: "numeric",
+    minute: "2-digit",
   });
+
 
   const rsvpHandler = async () => {
     const rsvp = await toggleRsvpEvent(+id!!);
     alert(rsvp.message);
     navigate(0);
   }
+
+  const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
+  
+  const defaultLat = 52.2297;
+  const defaultLng = 21.0122;
+
+  const latitude = event?.latitude ?? defaultLat;
+  const longitude = event?.longitude ?? defaultLng;
+
+  const centerParam = `${latitude},${longitude}`;
+  console.log("Center param going to Google:", centerParam);
 
   return (
     <div className="phone-container">
@@ -77,9 +91,7 @@ const IMAGES = [
         </div>
 
         <h2 className="event-title">{event.title}</h2>
-        <span className="event-going">
-          Going {event.attendees_count}
-        </span>
+        <span className="event-going">Going {event.attendees_count}</span>
 
         <div className="event-meta">
           <div className="meta-item">
@@ -97,11 +109,27 @@ const IMAGES = [
               <img src={event.is_promoted ? PromotedEventIcon : EventIcon} alt="icon" className="meta-icon" />
               {event.is_promoted && (<div className="promo-badge">Promoted</div>)}
             </div>
-          
         </div>
 
         <h3 className="section-title">About Event</h3>
         <p className="about-text">{event.description}</p>
+
+        <div className="map-container">
+          <iframe
+            title="Event Location"
+            width="100%"
+            height="250"
+            style={{ border: 0, borderRadius: 8 }}
+            loading="lazy"
+            allowFullScreen
+            src={
+              `https://www.google.com/maps/embed/v1/view?` +
+              `key=${googleMapsApiKey}` +
+              `&center=${event.latitude},${event.longitude}` +
+              `&zoom=15`
+            }
+          ></iframe>
+        </div>
 
         <div className="view-action-buttons">
           <button className="outline-btn">Invite</button>
