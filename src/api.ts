@@ -104,6 +104,9 @@ export const createEvent = (payload: EventData) =>
 export const updateEvent = (id: string, payload: EventData) =>
   api.put<EventData>(`/events/${id}`, payload).then((r) => r.data);
 
+export const deleteEvent = (id: string) =>
+  api.delete(`/events/${id}`);
+
 export interface EventSummary {
   id: number;
   title: string;
@@ -114,6 +117,7 @@ export interface EventSummary {
   attendees_count: number;
   latitude: number; // ← new
   longitude: number; // ← new
+  is_owner: boolean;
 }
 
 export function fetchEvents(): Promise<EventSummary[]> {

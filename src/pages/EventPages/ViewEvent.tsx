@@ -4,6 +4,7 @@ import {
   getEventById as getEvent,
   EventSummary,
   toggleRsvpEvent,
+  deleteEvent,
 } from "../../api";
 import EventIcon from "@/assets/images/party.png";
 import PromotedEventIcon from "@/assets/images/star.png";
@@ -163,6 +164,21 @@ export default function ViewEvent() {
         <button onClick={rsvpHandler} className="primary-btn buy-btn">
           Buy/Return Ticket <span className="arrow">➜</span>
         </button>
+        {event.is_owner && (
+          <button
+            className="primary-btn delete-btn"
+            onClick={async () => {
+              if (confirm("Are you sure you want to delete this event?")) {
+                await deleteEvent(`${event.id}`);
+                navigate("/");
+              }
+            }}
+          >
+    Delete
+  </button>
+)}
+
+
       </div>
       {showShare && (
         <ShareModal
