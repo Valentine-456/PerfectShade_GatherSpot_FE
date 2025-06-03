@@ -15,7 +15,6 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
   const toggleDrawer = () => setIsOpen(!isOpen);
 
-
   useEffect(() => {
     fetchEvents()
       .then((events) => {
@@ -53,7 +52,6 @@ export default function HomePage() {
             id={ev.id}
             image="https://cdn-cjhkj.nitrocdn.com/krXSsXVqwzhduXLVuGLToUwHLNnSxUxO/assets/images/optimized/rev-a4983f2/spotme.com/wp-content/uploads/2020/07/Hero-1.jpg"
           />
-
         ))}
       </section>
 

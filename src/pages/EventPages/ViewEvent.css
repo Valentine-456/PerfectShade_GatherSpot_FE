@@ -172,7 +172,7 @@
   font-size: 0.9rem;
 }
 
-.primary-btn.buy-btn {
+.primary-btn {
   background: #4a43ec;
   color: white;
   width: 100%;
@@ -183,6 +183,16 @@
   justify-content: center;
   align-items: center;
 }
+
+.delete-btn {
+  border: 1px solid #f44336;
+  color: #f44336;
+  background-color: white;
+}
+.delete-btn:hover {
+  background: #ffe5e5;
+}
+
 
 .buy-btn .arrow {
   margin-left: 8px;
