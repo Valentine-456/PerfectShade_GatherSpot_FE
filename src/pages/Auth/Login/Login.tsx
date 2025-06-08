@@ -16,8 +16,9 @@ const Login = () => {
     e.preventDefault();
     setError(null);
     try {
-      const { token } = await loginUser({ username, password });
+      const { token, userID } = await loginUser({ username, password });
       login(token);
+      localStorage.setItem("userID", String(userID));
       navigate(AppRoutes.HOME);
     } catch (err: any) {
       setError(err.response?.data?.message || err.message);

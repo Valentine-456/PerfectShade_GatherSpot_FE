@@ -34,7 +34,7 @@ const MenuDrawer = (props: MenuDrawerProps) => {
           <li>
             <span className="icon">📅</span> Events
           </li>
-          <li>
+          <li onClick={() => nav(AppRoutes.FRIENDS)}>
             <span className="icon">👥</span> Friends
           </li>
           <li>

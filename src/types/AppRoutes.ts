@@ -9,4 +9,8 @@ export enum AppRoutes {
   EVENT_UPDATE = "/events/:id/edit",
   EVENT_VIEW = "/events/:id/view",
   MAP = "/map",
+  FRIENDS = "/friends",
+  FRIEND_PROFILE = "/users/:id",
+  FRIEND_REQUESTS = "/friends/requests",
+  FRIEND_LIST = "/friends/list",
 }

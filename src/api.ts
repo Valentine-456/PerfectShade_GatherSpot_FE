@@ -104,8 +104,7 @@ export const createEvent = (payload: EventData) =>
 export const updateEvent = (id: string, payload: EventData) =>
   api.put<EventData>(`/events/${id}`, payload).then((r) => r.data);
 
-export const deleteEvent = (id: string) =>
-  api.delete(`/events/${id}`);
+export const deleteEvent = (id: string) => api.delete(`/events/${id}`);
 
 export interface EventSummary {
   id: number;
@@ -126,12 +125,96 @@ export function fetchEvents(): Promise<EventSummary[]> {
     .then((res) => res.data.data);
 }
 
-export function getEvent(id: number): Promise<EventSummary> {
-  return api.get<any>(`/events/${id}`).then((r) => r.data.data);
+export function getEvent(id: number): Promise<EventItem> {
+  return api.get<EventResponse>(`/events/${id}`).then((r) => r.data.data);
 }
 
 export function toggleRsvpEvent(id: number): Promise<RsvpResponse> {
   return api.post<RsvpResponse>(`/events/${id}/rsvp/`).then((r) => r.data);
+}
+
+export interface UserSummary {
+  id: number;
+  username: string;
+}
+
+export interface FriendRequest {
+  id: number;
+  from_user: UserSummary;
+  to_user: UserSummary;
+}
+
+export interface FriendDataResponse {
+  username: string; // ← add this
+  login: string; // ← add this
+  friends: UserSummary[];
+  incoming: FriendRequest[];
+  outgoing: FriendRequest[];
+  interests: string[]; // ← also add if not present
+  events_count: number; // ← also add if not present
+  status: "none" | "sent" | "received" | "friends";
+  request_id?: number;
+}
+
+export function getFriendData(
+  viewedUserId: number
+): Promise<FriendDataResponse> {
+  return api
+    .get<{ data: FriendDataResponse }>(`/users/${viewedUserId}/friendship`)
+    .then((res) => res.data.data);
+}
+
+export interface UserProfileData {
+  id: number;
+  username: string;
+  login: string;
+  interests: string[];
+  friends: UserSummary[];
+  events_count: number;
+}
+
+export function getUserProfile(userId: number): Promise<UserProfileData> {
+  return api
+    .get<UserProfileData>(`/users/${userId}/profile/`)
+    .then((res) => res.data);
+}
+
+export async function sendFriendRequest(toUserId: number) {
+  return api
+    .post<{ id: number }>(`/friend-requests/`, { to_user: toUserId })
+    .then((res) => res.data);
+}
+
+export async function respondToRequest(
+  id: number,
+  action: "accept" | "decline" | "cancel"
+) {
+  return api.post(`/friend-requests/${id}/${action}/`);
+}
+
+export interface UserSummary {
+  id: number;
+  username: string;
+}
+
+export function getMyFriends(): Promise<{ data: UserSummary[] }> {
+  return api
+    .get<{ data: UserSummary[] }>("/me/friends")
+    .then((res) => res.data);
+}
+
+export type SearchResultUser = {
+  id: number;
+  username: string;
+  status: "none" | "sent" | "received" | "friends";
+};
+
+export async function searchUsers(
+  query: string
+): Promise<{ results: SearchResultUser[] }> {
+  return api
+    .get(`/users/search?q=${encodeURIComponent(query)}`)
+    .then((res) => res.data);
 }
 
 export default api;
