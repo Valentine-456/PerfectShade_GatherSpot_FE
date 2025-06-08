@@ -13,6 +13,8 @@ import CreateEvent from "./pages/EventPages/CreateEvent";
 import UpdateEvent from "./pages/EventPages/UpdateEvent";
 import ViewEvent from "./pages/EventPages/ViewEvent";
 import MapPage from "./pages/Map/MapPage";
+import Friends from "./pages/Friends/Friends";
+import UserProfile from "./pages/Profile/UserProfile";
 
 export default function App() {
   return (
@@ -29,6 +31,8 @@ export default function App() {
         <Route path={AppRoutes.EVENT_UPDATE} element={<UpdateEvent />} />
         <Route path={AppRoutes.EVENT_VIEW} element={<ViewEvent />} />
         <Route path={AppRoutes.MAP} element={<MapPage />} />
+        <Route path="/friends" element={<Friends />} />
+        <Route path="/users/:id" element={<UserProfile />} />
       </Route>
 
       <Route path={AppRoutes.NOT_FOUND} element={<NotFound />} />

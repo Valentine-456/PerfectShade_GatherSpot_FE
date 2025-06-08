@@ -1,0 +1,38 @@
+.interests-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.interests-header span {
+  font-weight: bold;
+}
+.interests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.interest-tag {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  color: white;
+  background: #4a43ec;
+}
+.interest-tag:nth-child(1) {
+  background: #6fcf97;
+} /* green */
+.interest-tag:nth-child(2) {
+  background: #eb5757;
+} /* red */
+.interest-tag:nth-child(3) {
+  background: #f2994a;
+} /* orange */
+.interest-tag:nth-child(4) {
+  background: #56ccf2;
+} /* blue */
+.interest-tag:nth-child(5) {
+  background: #bb6bd9;
+} /* purple */
