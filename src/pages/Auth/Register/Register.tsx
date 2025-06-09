@@ -19,7 +19,7 @@ const Register = () => {
     setError(null);
     try {
       await registerUser({ username, email, password, user_type: userType });
-      navigate("/login"); // send them to login next
+      navigate("/login");
     } catch (err: any) {
       setError(err.response?.data?.message || err.message);
     }
@@ -35,7 +35,31 @@ const Register = () => {
           ←
         </Link>
         <h2>Sign up</h2>
-        {/* toggle buttons omitted for brevity */}
+
+        {/* ←–– new user type selector ––→ */}
+        <div className="user-type-selector" style={{ marginBottom: 16 }}>
+          <label>
+            <input
+              type="radio"
+              name="userType"
+              value="individual"
+              checked={userType === "individual"}
+              onChange={() => setUserType("individual")}
+            />
+            Individual
+          </label>
+          <label style={{ marginLeft: 24 }}>
+            <input
+              type="radio"
+              name="userType"
+              value="organization"
+              checked={userType === "organization"}
+              onChange={() => setUserType("organization")}
+            />
+            Organization
+          </label>
+        </div>
+
         <input
           type="text"
           name="username"

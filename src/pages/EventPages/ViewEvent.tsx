@@ -6,6 +6,7 @@ import {
   toggleRsvpEvent,
   deleteEvent,
 } from "../../api";
+import axios from "axios";
 import EventIcon from "@/assets/images/party.png";
 import PromotedEventIcon from "@/assets/images/star.png";
 import LocationIcon from "@/assets/images/map.png";
@@ -18,6 +19,7 @@ export default function ViewEvent() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [event, setEvent] = useState<EventSummary | null>(null);
+  const [userType, setUserType] = useState<"individual"|"organization"|null>(null);
   const [bannerUrl, setBannerUrl] = useState<string>("");
   const [showShare, setShowShare] = useState(false);
 
@@ -45,6 +47,10 @@ export default function ViewEvent() {
       setEvent(e);
       console.log(e);
       setBannerUrl(getRandomImageUrl());
+      axios
+    .get("/api/auth/me/")
+    .then(res => setUserType(res.data.user_type))
+    .catch(() => setUserType("individual")); // fallback if needed
     });
   }, [id]);
 
@@ -164,6 +170,9 @@ export default function ViewEvent() {
         <button onClick={rsvpHandler} className="primary-btn buy-btn">
           Buy/Return Ticket <span className="arrow">➜</span>
         </button>
+
+      
+
         {event.is_owner && (
           <button
             className="primary-btn delete-btn"
