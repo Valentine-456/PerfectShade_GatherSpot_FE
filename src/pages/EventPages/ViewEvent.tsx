@@ -96,6 +96,25 @@ export default function ViewEvent() {
     }
   };
 
+  const handleCancelAttendance = async () => {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/events/${id}/rsvp/`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    if (res.ok) {
+      alert("You are no longer attending.");
+      navigate(0); // Reload the page
+    } else {
+      alert("Failed to cancel attendance.");
+    }
+  };
+
   const defaultLat = 52.2297;
   const defaultLng = 21.0122;
   const latitude = event?.latitude ?? defaultLat;
@@ -180,9 +199,18 @@ export default function ViewEvent() {
           </button>
         </div>
 
-        <button onClick={handleBuyTicket} className="primary-btn buy-btn">
-          Buy Ticket <span className="arrow">➔</span>
-        </button>
+        {event.is_attending ? (
+          <button
+            onClick={handleCancelAttendance}
+            className="primary-btn danger"
+          >
+            Cancel Attendance
+          </button>
+        ) : (
+          <button onClick={handleBuyTicket} className="primary-btn buy-btn">
+            Buy Ticket <span className="arrow">➔</span>
+          </button>
+        )}
 
         {event.is_owner && (
           <button

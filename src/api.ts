@@ -25,6 +25,10 @@ export interface AuthResponse {
 export interface RsvpResponse {
   success: boolean;
   message: string;
+  data: {
+    attendees_count: number;
+    is_attending: boolean;
+  };
 }
 
 export function registerUser(payload: {
@@ -52,6 +56,7 @@ export interface EventItem {
   date: string; // ISO string
   is_promoted: boolean;
   attendees_count: number;
+  is_attending?: boolean;
 }
 
 interface EventResponse {
@@ -117,6 +122,7 @@ export interface EventSummary {
   latitude: number; // ← new
   longitude: number; // ← new
   is_owner: boolean;
+  is_attending?: boolean;
 }
 
 export function fetchEvents(
@@ -132,9 +138,7 @@ export function fetchEvents(
   }
   const query = params.toString();
   const url = query ? `/events?${query}` : "/events";
-  return api
-    .get<{ data: EventSummary[] }>(url)
-    .then((res) => res.data.data);
+  return api.get<{ data: EventSummary[] }>(url).then((res) => res.data.data);
 }
 
 export function getEvent(id: number): Promise<EventItem> {

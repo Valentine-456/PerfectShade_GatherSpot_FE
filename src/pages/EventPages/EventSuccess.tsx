@@ -1,16 +1,15 @@
 import { useEffect } from "react";
-import { useParams, useSearchParams, Link } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 
 export default function EventSuccess() {
   const { id } = useParams();
   const [params] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const confirmAndRsvp = async () => {
       const sessionId = params.get("session_id");
-      if (!sessionId || !id) {
-        return;
-      }
+      if (!sessionId || !id) return;
 
       try {
         await fetch(
@@ -24,21 +23,16 @@ export default function EventSuccess() {
             body: JSON.stringify({ session_id: sessionId }),
           }
         );
+
+        // ✅ Redirect back to event view to reflect updated RSVP state
+        navigate(`/events/${id}/view`);
       } catch (err) {
         console.error("Payment confirmation failed", err);
       }
     };
 
     confirmAndRsvp();
-  }, [id, params]);
+  }, [id, params, navigate]);
 
-  return (
-    <div className="phone-container">
-      <h2>🎉 Ticket Purchased</h2>
-      <p>You are now attending this event!</p>
-      <Link to="/" className="primary-btn">
-        Back to Events
-      </Link>
-    </div>
-  );
+  return null; // ⬅️ no need to show anything since we redirect immediately
 }
