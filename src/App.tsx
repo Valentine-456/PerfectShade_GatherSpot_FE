@@ -15,6 +15,7 @@ import ViewEvent from "./pages/EventPages/ViewEvent";
 import MapPage from "./pages/Map/MapPage";
 import Friends from "./pages/Friends/Friends";
 import UserProfile from "./pages/Profile/UserProfile";
+import EventSuccess from "./pages/EventPages/EventSuccess";
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
         <Route path={AppRoutes.MAP} element={<MapPage />} />
         <Route path="/friends" element={<Friends />} />
         <Route path="/users/:id" element={<UserProfile />} />
+        <Route path="/event-success/:id" element={<EventSuccess />} />
       </Route>
 
       <Route path={AppRoutes.NOT_FOUND} element={<NotFound />} />

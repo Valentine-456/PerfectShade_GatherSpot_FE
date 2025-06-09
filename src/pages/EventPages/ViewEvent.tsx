@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  getEventById as getEvent,
-  EventSummary,
-  toggleRsvpEvent,
-  deleteEvent,
-} from "../../api";
+import { getEventById as getEvent, EventSummary, deleteEvent } from "../../api";
 import EventIcon from "@/assets/images/party.png";
 import PromotedEventIcon from "@/assets/images/star.png";
 import LocationIcon from "@/assets/images/map.png";
@@ -13,7 +8,9 @@ import CalendarIcon from "@/assets/images/calendar.png";
 import "./ViewEvent.css";
 import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 import ShareModal from "@/components/ShareModal/ShareModal";
+import { loadStripe } from "@stripe/stripe-js";
 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
 export default function ViewEvent() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -43,7 +40,6 @@ export default function ViewEvent() {
     if (!id) return;
     getEvent(+id).then((e) => {
       setEvent(e);
-      console.log(e);
       setBannerUrl(getRandomImageUrl());
     });
   }, [id]);
@@ -67,20 +63,43 @@ export default function ViewEvent() {
     minute: "2-digit",
   });
 
-  const rsvpHandler = async () => {
-    const rsvp = await toggleRsvpEvent(+id!!);
-    alert(rsvp.message);
-    navigate(0);
+  const handleBuyTicket = async () => {
+    const stripe = await stripePromise;
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/events/${id}/create-checkout-session/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if (!res.ok) {
+      const text = await res.text();
+      console.error("Bad response:", res.status, text);
+      return alert("Payment failed. Please try again.");
+    }
+
+    const data = await res.json();
+    console.log("Stripe session data:", data);
+
+    if (!data.id) {
+      alert("Stripe session ID missing. Please try again.");
+      return;
+    }
+    const result = await stripe?.redirectToCheckout({ sessionId: data.id });
+
+    if (result?.error) {
+      console.error("Stripe redirect error:", result.error.message);
+      alert("Stripe redirect failed: " + result.error.message);
+    }
   };
 
   const defaultLat = 52.2297;
   const defaultLng = 21.0122;
-
   const latitude = event?.latitude ?? defaultLat;
   const longitude = event?.longitude ?? defaultLng;
-
-  const centerParam = `${latitude},${longitude}`;
-  console.log("Center param going to Google:", centerParam);
 
   return (
     <div className="phone-container">
@@ -161,9 +180,10 @@ export default function ViewEvent() {
           </button>
         </div>
 
-        <button onClick={rsvpHandler} className="primary-btn buy-btn">
-          Buy/Return Ticket <span className="arrow">➜</span>
+        <button onClick={handleBuyTicket} className="primary-btn buy-btn">
+          Buy Ticket <span className="arrow">➔</span>
         </button>
+
         {event.is_owner && (
           <button
             className="primary-btn delete-btn"
@@ -174,12 +194,11 @@ export default function ViewEvent() {
               }
             }}
           >
-    Delete
-  </button>
-)}
-
-
+            Delete
+          </button>
+        )}
       </div>
+
       {showShare && (
         <ShareModal
           url={window.location.href}
