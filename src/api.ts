@@ -44,6 +44,17 @@ export function loginUser(payload: { username: string; password: string }) {
   });
 }
 
+export function loginWithGoogle(googleToken: string) {
+  return api
+    .post<AuthResponse>("/google-signin", { token: googleToken })
+    .then((r) => {
+      const { token, userID } = r.data.data;
+      localStorage.setItem("token", token);
+      return { token, userID };
+    });
+}
+
+
 export interface EventItem {
   id: number;
   title: string;

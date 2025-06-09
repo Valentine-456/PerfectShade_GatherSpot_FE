@@ -3,7 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../../api";
 import "../auth.css";
 import { AppRoutes } from "../../../types/AppRoutes";
+import { loginWithGoogle } from "../../../api";
 import { useAuth } from "../../../security/AuthContext";
+import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -12,6 +14,21 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+
+  const handleGoogleSuccess = async (res: CredentialResponse) => {
+     if (!res.credential) {
+       setError("Google login failed");
+       return;
+     }
+     try {
+       const { token, userID } = await loginWithGoogle(res.credential);
+       login(token);
+       localStorage.setItem("userID", String(userID));
+       navigate(AppRoutes.HOME);
+     } catch (err: any) {
+       setError(err.response?.data?.message || err.message);
+     }
+   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -54,12 +71,14 @@ const Login = () => {
         {error && <p style={{ color: "red" }}>{error}</p>}
         <div className="divider">OR</div>
 
-        <button type="button" className="social-btn google">
-          <div className="icon"></div> Login with Google
-        </button>
-        <button type="button" className="social-btn facebook">
-          <div className="icon"></div> Login with Facebook
-        </button>
+      
+
+      <GoogleLogin
+        onSuccess={handleGoogleSuccess}
+        onError={() => setError("Google login failed")}
+      />
+
+        
 
         <p className="auth-footer">
           Don’t have an account? <Link to={AppRoutes.REGISTER}>Sign up</Link>
