@@ -6,7 +6,6 @@ import {
   toggleRsvpEvent,
   deleteEvent,
 } from "../../api";
-import axios from "axios";
 import EventIcon from "@/assets/images/party.png";
 import PromotedEventIcon from "@/assets/images/star.png";
 import LocationIcon from "@/assets/images/map.png";
@@ -19,7 +18,6 @@ export default function ViewEvent() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [event, setEvent] = useState<EventSummary | null>(null);
-  const [userType, setUserType] = useState<"individual"|"organization"|null>(null);
   const [bannerUrl, setBannerUrl] = useState<string>("");
   const [showShare, setShowShare] = useState(false);
 
@@ -42,17 +40,16 @@ export default function ViewEvent() {
   });
 
   useEffect(() => {
-    if (!id) return;
-    getEvent(+id).then((e) => {
-      setEvent(e);
-      console.log(e);
-      setBannerUrl(getRandomImageUrl());
-      axios
-    .get("/api/auth/me/")
-    .then(res => setUserType(res.data.user_type))
-    .catch(() => setUserType("individual")); // fallback if needed
-    });
-  }, [id]);
+  if (!id) return;
+
+  // fetch the event
+  getEvent(+id).then(e => {
+    setEvent(e);
+    setBannerUrl(getRandomImageUrl());
+  });
+
+  
+}, [id]);
 
   if (!event) {
     return (
@@ -74,10 +71,23 @@ export default function ViewEvent() {
   });
 
   const rsvpHandler = async () => {
+  try {
     const rsvp = await toggleRsvpEvent(+id!!);
     alert(rsvp.message);
     navigate(0);
-  };
+  } catch (err: any) {
+    // if backend returned HTTP 403 Forbidden
+    if (err.response?.status === 403) {
+      alert("Organizations can't attend events");
+    } else {
+      console.error("RSVP error:", err);
+      alert(
+        err.response?.data?.message ||
+        "Something went wrong while trying to RSVP."
+      );
+    }
+  }
+};
 
   const defaultLat = 52.2297;
   const defaultLng = 21.0122;

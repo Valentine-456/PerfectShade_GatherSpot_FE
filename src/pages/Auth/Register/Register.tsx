@@ -36,28 +36,22 @@ const Register = () => {
         </Link>
         <h2>Sign up</h2>
 
-        {/* ←–– new user type selector ––→ */}
-        <div className="user-type-selector" style={{ marginBottom: 16 }}>
-          <label>
-            <input
-              type="radio"
-              name="userType"
-              value="individual"
-              checked={userType === "individual"}
-              onChange={() => setUserType("individual")}
-            />
+        {/* ←–– swapped for toggle-buttons ––→ */}
+        <div className="toggle-buttons user-type-selector">
+          <button
+            type="button"
+            className={`toggle ${userType === "individual" ? "active" : ""}`}
+            onClick={() => setUserType("individual")}
+          >
             Individual
-          </label>
-          <label style={{ marginLeft: 24 }}>
-            <input
-              type="radio"
-              name="userType"
-              value="organization"
-              checked={userType === "organization"}
-              onChange={() => setUserType("organization")}
-            />
+          </button>
+          <button
+            type="button"
+            className={`toggle ${userType === "organization" ? "active" : ""}`}
+            onClick={() => setUserType("organization")}
+          >
             Organization
-          </label>
+          </button>
         </div>
 
         <input
