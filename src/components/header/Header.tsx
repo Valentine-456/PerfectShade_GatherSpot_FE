@@ -5,9 +5,19 @@ import filterIcon from "@/assets/images/filter.png";
 
 type HeaderProps = {
   toggleDrawer: () => void;
+  searchTerm: string;
+  promotedOnly: boolean;
+  onSearchChange: (term: string) => void;
+  onFilterToggle: () => void;
 };
 
-const Header = (props: HeaderProps) => {
+const Header = ({
+  toggleDrawer,
+  searchTerm,
+  promotedOnly,
+  onSearchChange,
+  onFilterToggle,
+}: HeaderProps) => {
   return (
     <div className="header-container">
       <div className="header-top">
@@ -15,7 +25,7 @@ const Header = (props: HeaderProps) => {
           src={menuIcon}
           alt="Menu"
           className="icon menu-icon"
-          onClick={props.toggleDrawer}
+           onClick={toggleDrawer}
         />
 
         <div className="location-info">
@@ -34,12 +44,21 @@ const Header = (props: HeaderProps) => {
       <div className="header-bottom">
         <div className="search-wrapper">
           <span className="search-icon">🔍</span>
-          <input type="text" placeholder="Search..." className="search-input" />
+          <input
+            type="text"
+           placeholder="Search events…"
+            className="search-input"
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+         />
         </div>
 
-        <button className="filter-btn">
+        <button
+          className={`filter-btn${promotedOnly ? " active" : ""}`}
+          onClick={onFilterToggle}
+        >
           <img src={filterIcon} alt="Filters" className="filter-icon" />
-          Filters
+          {promotedOnly ? "Promoted Only" : "Show Promoted"}
         </button>
       </div>
     </div>

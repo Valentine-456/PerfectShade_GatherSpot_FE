@@ -119,9 +119,21 @@ export interface EventSummary {
   is_owner: boolean;
 }
 
-export function fetchEvents(): Promise<EventSummary[]> {
+export function fetchEvents(
+  searchTerm: string = "",
+  promotedOnly: boolean = false
+): Promise<EventSummary[]> {
+  const params = new URLSearchParams();
+  if (searchTerm.trim()) {
+    params.append("title", searchTerm.trim());
+  }
+  if (promotedOnly) {
+    params.append("promoted", "true");
+  }
+  const query = params.toString();
+  const url = query ? `/events?${query}` : "/events";
   return api
-    .get<{ data: EventSummary[] }>("/events")
+    .get<{ data: EventSummary[] }>(url)
     .then((res) => res.data.data);
 }
 

@@ -13,10 +13,12 @@ export default function HomePage() {
   const [events, setEvents] = useState<EventSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");      
+  const [promotedOnly, setPromotedOnly] = useState<boolean>(false); 
   const toggleDrawer = () => setIsOpen(!isOpen);
 
   useEffect(() => {
-    fetchEvents()
+    fetchEvents(searchTerm, promotedOnly) 
       .then((events) => {
         setEvents(events);
         setLoading(false);
@@ -26,11 +28,17 @@ export default function HomePage() {
         setError("Failed to load events");
         setLoading(false);
       });
-  }, []);
+ }, [searchTerm, promotedOnly]); 
 
   return (
     <div className="home-container">
-      <Header toggleDrawer={() => setIsOpen((o) => !o)} />
+      <Header
+        toggleDrawer={() => setIsOpen((o) => !o)}
+        searchTerm={searchTerm}
+        promotedOnly={promotedOnly}
+        onSearchChange={setSearchTerm}
+        onFilterToggle={() => setPromotedOnly((p) => !p)}
+      />
       <MenuDrawer isOpen={isOpen} toggleDrawer={() => setIsOpen((o) => !o)} />
 
       <section className="event-list">
