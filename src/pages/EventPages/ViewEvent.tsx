@@ -63,6 +63,7 @@ export default function ViewEvent() {
     minute: "2-digit",
   });
 
+
   const handleBuyTicket = async () => {
     const stripe = await stripePromise;
     const res = await fetch(
@@ -114,6 +115,7 @@ export default function ViewEvent() {
       alert("Failed to cancel attendance.");
     }
   };
+
 
   const defaultLat = 52.2297;
   const defaultLng = 21.0122;
@@ -211,6 +213,7 @@ export default function ViewEvent() {
             Buy Ticket <span className="arrow">➔</span>
           </button>
         )}
+
 
         {event.is_owner && (
           <button
