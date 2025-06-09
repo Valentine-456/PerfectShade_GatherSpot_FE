@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  getEventById as getEvent,
-  EventSummary,
-  toggleRsvpEvent,
-  deleteEvent,
-} from "../../api";
+import { getEventById as getEvent, EventSummary, deleteEvent } from "../../api";
 import EventIcon from "@/assets/images/party.png";
 import PromotedEventIcon from "@/assets/images/star.png";
 import LocationIcon from "@/assets/images/map.png";
@@ -13,7 +8,9 @@ import CalendarIcon from "@/assets/images/calendar.png";
 import "./ViewEvent.css";
 import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 import ShareModal from "@/components/ShareModal/ShareModal";
+import { loadStripe } from "@stripe/stripe-js";
 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
 export default function ViewEvent() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -40,16 +37,12 @@ export default function ViewEvent() {
   });
 
   useEffect(() => {
-  if (!id) return;
-
-  // fetch the event
-  getEvent(+id).then(e => {
-    setEvent(e);
-    setBannerUrl(getRandomImageUrl());
-  });
-
-  
-}, [id]);
+    if (!id) return;
+    getEvent(+id).then((e) => {
+      setEvent(e);
+      setBannerUrl(getRandomImageUrl());
+    });
+  }, [id]);
 
   if (!event) {
     return (
@@ -70,33 +63,64 @@ export default function ViewEvent() {
     minute: "2-digit",
   });
 
-  const rsvpHandler = async () => {
-  try {
-    const rsvp = await toggleRsvpEvent(+id!!);
-    alert(rsvp.message);
-    navigate(0);
-  } catch (err: any) {
-    // if backend returned HTTP 403 Forbidden
-    if (err.response?.status === 403) {
-      alert("Organizations can't attend events");
-    } else {
-      console.error("RSVP error:", err);
-      alert(
-        err.response?.data?.message ||
-        "Something went wrong while trying to RSVP."
-      );
+
+  const handleBuyTicket = async () => {
+    const stripe = await stripePromise;
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/events/${id}/create-checkout-session/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if (!res.ok) {
+      const text = await res.text();
+      console.error("Bad response:", res.status, text);
+      return alert("Payment failed. Please try again.");
     }
-  }
-};
+
+    const data = await res.json();
+    console.log("Stripe session data:", data);
+
+    if (!data.id) {
+      alert("Stripe session ID missing. Please try again.");
+      return;
+    }
+    const result = await stripe?.redirectToCheckout({ sessionId: data.id });
+
+    if (result?.error) {
+      console.error("Stripe redirect error:", result.error.message);
+      alert("Stripe redirect failed: " + result.error.message);
+    }
+  };
+
+  const handleCancelAttendance = async () => {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/events/${id}/rsvp/`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    if (res.ok) {
+      alert("You are no longer attending.");
+      navigate(0); // Reload the page
+    } else {
+      alert("Failed to cancel attendance.");
+    }
+  };
+
 
   const defaultLat = 52.2297;
   const defaultLng = 21.0122;
-
   const latitude = event?.latitude ?? defaultLat;
   const longitude = event?.longitude ?? defaultLng;
-
-  const centerParam = `${latitude},${longitude}`;
-  console.log("Center param going to Google:", centerParam);
 
   return (
     <div className="phone-container">
@@ -177,11 +201,19 @@ export default function ViewEvent() {
           </button>
         </div>
 
-        <button onClick={rsvpHandler} className="primary-btn buy-btn">
-          Buy/Return Ticket <span className="arrow">➜</span>
-        </button>
+        {event.is_attending ? (
+          <button
+            onClick={handleCancelAttendance}
+            className="primary-btn danger"
+          >
+            Cancel Attendance
+          </button>
+        ) : (
+          <button onClick={handleBuyTicket} className="primary-btn buy-btn">
+            Buy Ticket <span className="arrow">➔</span>
+          </button>
+        )}
 
-      
 
         {event.is_owner && (
           <button
@@ -193,12 +225,11 @@ export default function ViewEvent() {
               }
             }}
           >
-    Delete
-  </button>
-)}
-
-
+            Delete
+          </button>
+        )}
       </div>
+
       {showShare && (
         <ShareModal
           url={window.location.href}
