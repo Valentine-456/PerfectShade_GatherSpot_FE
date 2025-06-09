@@ -11,19 +11,18 @@ export default function MapPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [events, setEvents] = useState<EventSummary[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
+  const [searchTerm, setSearchTerm] = useState<string>("");      
+  const [promotedOnly, setPromotedOnly] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  // Read your Maps API key from Vite env
   const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
 
-  // 1) Load the Google Maps JS API with the hook
   const { isLoaded: mapsLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey,
   });
 
-  // 2) Fetch all events (with lat/lng) from your backend
   useEffect(() => {
-    fetchEvents()
+    fetchEvents(searchTerm, promotedOnly)
       .then((data) => {
         setEvents(data);
       })
@@ -31,9 +30,8 @@ export default function MapPage() {
         console.error("Failed to fetch events for map:", err);
       })
       .finally(() => setLoadingEvents(false));
-  }, []);
+  }, [searchTerm, promotedOnly]);
 
-  // 3) Compute a center based on event coordinates (or fallback)
   const defaultCenter = events.length
     ? {
         lat: events.reduce((sum, e) => sum + e.latitude, 0) / events.length,
@@ -41,7 +39,6 @@ export default function MapPage() {
       }
     : { lat: 52.2297, lng: 21.0122 };
 
-  // 4) Show errors or loading states as needed
   if (loadError) {
     return (
       <div className="map-page-container">
@@ -59,11 +56,12 @@ export default function MapPage() {
 
   return (
     <div className="map-page-container">
-      {/* HEADER (absolute, 35vh tall) */}
-      <Header toggleDrawer={() => setIsOpen((o) => !o)} />
+      <Header toggleDrawer={() => setIsOpen((o) => !o)} searchTerm={searchTerm}
+        promotedOnly={promotedOnly}
+        onSearchChange={setSearchTerm}
+        onFilterToggle={() => setPromotedOnly((p) => !p)}/>
       <MenuDrawer isOpen={isOpen} toggleDrawer={() => setIsOpen((o) => !o)} />
 
-      {/* MAIN CONTENT: absolutely fills from top:35vh to bottom:65px */}
       <div className="map-content">
         {!mapsLoaded || loadingEvents ? (
           <p className="map-loading">Loading map…</p>
@@ -84,8 +82,6 @@ export default function MapPage() {
           </GoogleMap>
         )}
       </div>
-
-      {/* FOOTER (fixed 65px tall) */}
       <FooterNavigation />
     </div>
   );
