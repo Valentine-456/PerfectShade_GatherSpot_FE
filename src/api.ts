@@ -121,7 +121,7 @@ export interface EventSummary {
 
 export function fetchEvents(
   searchTerm: string = "",
-  promotedOnly: boolean = false
+  promotedOnly: boolean = false,
 ): Promise<EventSummary[]> {
   const params = new URLSearchParams();
   if (searchTerm.trim()) {
@@ -132,9 +132,7 @@ export function fetchEvents(
   }
   const query = params.toString();
   const url = query ? `/events?${query}` : "/events";
-  return api
-    .get<{ data: EventSummary[] }>(url)
-    .then((res) => res.data.data);
+  return api.get<{ data: EventSummary[] }>(url).then((res) => res.data.data);
 }
 
 export function getEvent(id: number): Promise<EventItem> {
@@ -169,7 +167,7 @@ export interface FriendDataResponse {
 }
 
 export function getFriendData(
-  viewedUserId: number
+  viewedUserId: number,
 ): Promise<FriendDataResponse> {
   return api
     .get<{ data: FriendDataResponse }>(`/users/${viewedUserId}/friendship`)
@@ -199,7 +197,7 @@ export async function sendFriendRequest(toUserId: number) {
 
 export async function respondToRequest(
   id: number,
-  action: "accept" | "decline" | "cancel"
+  action: "accept" | "decline" | "cancel",
 ) {
   return api.post(`/friend-requests/${id}/${action}/`);
 }
@@ -222,7 +220,7 @@ export type SearchResultUser = {
 };
 
 export async function searchUsers(
-  query: string
+  query: string,
 ): Promise<{ results: SearchResultUser[] }> {
   return api
     .get(`/users/search?q=${encodeURIComponent(query)}`)

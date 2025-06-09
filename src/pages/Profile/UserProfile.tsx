@@ -40,17 +40,17 @@ export default function UserProfile() {
 
     if (friendInfo.status === "none") {
       sendFriendRequest(targetId).then(() =>
-        setFriendInfo((prev) => prev && { ...prev, status: "sent" })
+        setFriendInfo((prev) => prev && { ...prev, status: "sent" }),
       );
     } else if (friendInfo.status === "received" && reqId) {
       respondToRequest(reqId, "accept").then(() =>
-        setFriendInfo((prev) => prev && { ...prev, status: "friends" })
+        setFriendInfo((prev) => prev && { ...prev, status: "friends" }),
       );
     } else if (friendInfo.status === "sent" && reqId) {
       respondToRequest(reqId, "cancel").then(() =>
         setFriendInfo(
-          (prev) => prev && { ...prev, status: "none", request_id: undefined }
-        )
+          (prev) => prev && { ...prev, status: "none", request_id: undefined },
+        ),
       );
     }
   };

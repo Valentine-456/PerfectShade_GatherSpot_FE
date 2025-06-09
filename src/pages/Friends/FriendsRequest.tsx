@@ -14,13 +14,13 @@ export default function FriendRequests() {
 
   const handleAccept = (id: number) => {
     respondToRequest(id, "accept").then(() =>
-      setRequests((prev) => prev.filter((r) => r.id !== id))
+      setRequests((prev) => prev.filter((r) => r.id !== id)),
     );
   };
 
   const handleDecline = (id: number) => {
     respondToRequest(id, "decline").then(() =>
-      setRequests((prev) => prev.filter((r) => r.id !== id))
+      setRequests((prev) => prev.filter((r) => r.id !== id)),
     );
   };
 

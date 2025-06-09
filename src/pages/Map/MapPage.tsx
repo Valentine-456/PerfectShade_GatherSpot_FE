@@ -11,7 +11,7 @@ export default function MapPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [events, setEvents] = useState<EventSummary[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
-  const [searchTerm, setSearchTerm] = useState<string>("");      
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [promotedOnly, setPromotedOnly] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -56,10 +56,13 @@ export default function MapPage() {
 
   return (
     <div className="map-page-container">
-      <Header toggleDrawer={() => setIsOpen((o) => !o)} searchTerm={searchTerm}
+      <Header
+        toggleDrawer={() => setIsOpen((o) => !o)}
+        searchTerm={searchTerm}
         promotedOnly={promotedOnly}
         onSearchChange={setSearchTerm}
-        onFilterToggle={() => setPromotedOnly((p) => !p)}/>
+        onFilterToggle={() => setPromotedOnly((p) => !p)}
+      />
       <MenuDrawer isOpen={isOpen} toggleDrawer={() => setIsOpen((o) => !o)} />
 
       <div className="map-content">
