@@ -47,7 +47,7 @@ const Header = ({
           <input
             type="text"
            placeholder="Search events…"
-            className="search-input"
+            className="search-input-events"
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
          />
@@ -58,7 +58,7 @@ const Header = ({
           onClick={onFilterToggle}
         >
           <img src={filterIcon} alt="Filters" className="filter-icon" />
-          {promotedOnly ? "Promoted Only" : "Show Promoted"}
+          {promotedOnly ? "Show promoted" : "Clear filter"}
         </button>
       </div>
     </div>
