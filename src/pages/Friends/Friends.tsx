@@ -56,7 +56,7 @@ export default function Friends() {
 
   const handleDecline = (id: number) => {
     respondToRequest(id, "decline").then(() =>
-      setIncoming((prev) => prev.filter((r) => r.id !== id)),
+      setIncoming((prev) => prev.filter((r) => r.id !== id))
     );
   };
 
@@ -71,8 +71,8 @@ export default function Friends() {
       setOutgoing((prev) => prev.filter((r) => r.id !== request.id));
       setResults((prev) =>
         prev.map((user) =>
-          user.id === targetUserId ? { ...user, status: "none" } : user,
-        ),
+          user.id === targetUserId ? { ...user, status: "none" } : user
+        )
       );
     });
   };
@@ -93,8 +93,8 @@ export default function Friends() {
         ]);
         setResults((prev) =>
           prev.map((user) =>
-            user.id === targetId ? { ...user, status: "sent" } : user,
-          ),
+            user.id === targetId ? { ...user, status: "sent" } : user
+          )
         );
       })
       .finally(() => setPendingId(null));

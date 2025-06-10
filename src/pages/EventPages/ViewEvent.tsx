@@ -174,9 +174,11 @@ export default function ViewEvent() {
               }
             }}
           >
-            Delete
-          </button>
-        )}
+    Delete
+  </button>
+)}
+
+
       </div>
       {showShare && (
         <ShareModal

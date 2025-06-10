@@ -25,7 +25,7 @@ const Header = ({
           src={menuIcon}
           alt="Menu"
           className="icon menu-icon"
-          onClick={toggleDrawer}
+           onClick={toggleDrawer}
         />
 
         <div className="location-info">
@@ -46,11 +46,11 @@ const Header = ({
           <span className="search-icon">🔍</span>
           <input
             type="text"
-            placeholder="Search events…"
+           placeholder="Search events…"
             className="search-input-events"
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-          />
+         />
         </div>
 
         <button
