@@ -58,7 +58,7 @@ export default function HomePage() {
             location={ev.location}
             icon={ev.is_promoted ? PromotedEventIcon : EventIcon}
             id={ev.id}
-            image="https://cdn-cjhkj.nitrocdn.com/krXSsXVqwzhduXLVuGLToUwHLNnSxUxO/assets/images/optimized/rev-a4983f2/spotme.com/wp-content/uploads/2020/07/Hero-1.jpg"
+            image={ev.image ?? ""} 
           />
         ))}
       </section>

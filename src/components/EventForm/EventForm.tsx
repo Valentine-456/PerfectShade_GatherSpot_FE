@@ -22,6 +22,7 @@ export default function EventForm({ initialData, mode }: EventFormProps) {
       is_promoted: false,
     },
   );
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
 
   const center = { lat: form.latitude!!, lng: form.longitude!! };
@@ -39,16 +40,32 @@ export default function EventForm({ initialData, mode }: EventFormProps) {
       setForm((f) => ({ ...f, [key]: val }) as EventData);
     };
 
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setSaving(true);
+
+    // build form data
+    const data = new FormData();
+    Object.entries(form).forEach(([k, v]) => {
+      data.append(k, v as string);
+    });
+    if (imageFile) {
+      data.append("image", imageFile);
+    }
+
     try {
       if (mode === "create") {
-        await createEvent(form);
+        await createEvent(data);
       } else if (initialData?.id) {
-        await updateEvent(initialData.id, form);
+        await updateEvent(initialData.id, data);
       }
-      navigate("/");
+      // redirect…
     } finally {
       setSaving(false);
     }
@@ -122,6 +139,15 @@ export default function EventForm({ initialData, mode }: EventFormProps) {
           />
           Promote this event
         </label>
+
+         <label className="field">
+          <span>Image</span>
+          <input type="file" accept="image/*" onChange={onFileChange} />
+        </label>
+
+        <button type="submit" className="primary-btn" disabled={saving}>
+          {mode === "create" ? "Create" : "Save"}
+        </button>
 
         <div className="map-wrapper">
           <h4>Pick Event Location</h4>

@@ -1,26 +1,28 @@
-import { useState } from "react";
-import "./EventCard.css";
+// src/components/EventCard/EventCard.tsx
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./EventCard.css";
 
 interface EventCardProps {
+  id: string;
   date: string;
   title: string;
   goingCount: number;
   location: string;
   icon?: string;
-  image: string;
-  id: string;
+  image?: string;  // URL path from API, e.g. "/media/event_images/..."
 }
 
-const EventCard = ({
+const EventCard: React.FC<EventCardProps> = ({
+  id,
   date,
   title,
   goingCount,
   location,
   icon,
   image,
-  id,
-}: EventCardProps) => {
+}) => {
+  // Fallback images for events without uploads
   const IMAGES = [
     "https://cdn.pixabay.com/photo/2017/12/08/11/53/event-party-3005668_1280.jpg",
     "https://marketing-cdn.tickettailor.com/ZgP1j7LRO5ile62O_HowdoyouhostasmallcommunityeventA10-stepguide%2CMiniflagsattheevent.jpg?auto=format,compress",
@@ -29,31 +31,40 @@ const EventCard = ({
     "https://www.eventbrite.co.uk/blog/wp-content/uploads/2022/08/NEW-USEditorsPicks_Inspiring-Event-Themes.png",
     "https://tounka02.wordpress.com/wp-content/uploads/2014/09/boston-comunity-showcase.jpg",
   ] as const;
-
-  // 2) Utility to pick one at random
   function getRandomImageUrl(): string {
     const idx = Math.floor(Math.random() * IMAGES.length);
     return IMAGES[idx];
   }
+  const [fallbackBanner] = useState(getRandomImageUrl);
 
-  const [bannerUrl] = useState(getRandomImageUrl);
+  // Compute the final banner URL:
+  // If API returned an uploaded image path, prefix with backend base URL;
+  // otherwise use the random fallback.
+  const backendBase = import.meta.env.VITE_API_BASE_URL.replace(/\/api\/?$/, "");
+  const bannerUrl =
+    image && image.trim()
+      ? image.startsWith("http")
+        ? image
+        : `${backendBase}${image}`
+      : fallbackBanner;
+
   const navigate = useNavigate();
 
   return (
     <div
       className="event-card"
-      onClick={() => navigate("/events/" + id + "/view")}
+      onClick={() => navigate(`/events/${id}/view`)}
     >
       <div
         className="event-img"
         style={{ backgroundImage: `url(${bannerUrl})` }}
-      ></div>
+      />
       <div className="event-date">{date}</div>
       <div className="event-info">
         <h3>{title}</h3>
         <p className="going">{goingCount} Going</p>
         <p className="location">{location}</p>
-        {icon && <img src={icon} alt="icon" className="event-icon" />}
+        {icon && <img src={icon} alt="" className="event-icon" />}
       </div>
     </div>
   );
