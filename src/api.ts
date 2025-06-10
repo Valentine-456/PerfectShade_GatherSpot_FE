@@ -33,11 +33,11 @@ export function registerUser(payload: {
   password: string;
   user_type: "individual" | "organization";
 }) {
-  return api.post<AuthResponse>("/signup", payload).then((r) => r.data);
+  return api.post<AuthResponse>("/signup/", payload).then((r) => r.data);
 }
 
 export function loginUser(payload: { username: string; password: string }) {
-  return api.post<AuthResponse>("/signin", payload).then((r) => {
+  return api.post<AuthResponse>("/signin/", payload).then((r) => {
     const { token, username, userID } = r.data.data;
     localStorage.setItem("token", token);
     return { username, userID, token };
@@ -46,7 +46,7 @@ export function loginUser(payload: { username: string; password: string }) {
 
 export function loginWithGoogle(googleToken: string) {
   return api
-    .post<AuthResponse>("/google-signin", { token: googleToken })
+    .post<AuthResponse>("/google-signin/", { token: googleToken })
     .then((r) => {
       const { token, userID } = r.data.data;
       localStorage.setItem("token", token);
@@ -78,7 +78,7 @@ interface EventsResponse {
 }
 
 export function getEvents(): Promise<EventItem[]> {
-  return api.get<EventsResponse>("/events").then((res) => {
+  return api.get<EventsResponse>("/events/").then((res) => {
     if (res.data.success) {
       return res.data.data;
     }
@@ -87,7 +87,7 @@ export function getEvents(): Promise<EventItem[]> {
 }
 
 export function getEventById(id: string | number): Promise<EventItem> {
-  return api.get<EventResponse>(`/events/${id}`).then((res) => {
+  return api.get<EventResponse>(`/events/${id}/`).then((res) => {
     if (!res.data.success) {
       return Promise.reject(new Error(res.data.message));
     }
@@ -107,15 +107,15 @@ export interface EventData {
 }
 
 export const fetchEventById = (id: string) =>
-  api.get<EventData>(`/events/${id}`).then((r) => r.data);
+  api.get<EventData>(`/events/${id}/`).then((r) => r.data);
 
 export const createEvent = (payload: EventData) =>
-  api.post<EventData>(`/events`, payload).then((r) => r.data);
+  api.post<EventData>(`/events/`, payload).then((r) => r.data);
 
 export const updateEvent = (id: string, payload: EventData) =>
-  api.put<EventData>(`/events/${id}`, payload).then((r) => r.data);
+  api.put<EventData>(`/events/${id}/`, payload).then((r) => r.data);
 
-export const deleteEvent = (id: string) => api.delete(`/events/${id}`);
+export const deleteEvent = (id: string) => api.delete(`/events/${id}/`);
 
 export interface EventSummary {
   id: number;
@@ -142,14 +142,14 @@ export function fetchEvents(
     params.append("promoted", "true");
   }
   const query = params.toString();
-  const url = query ? `/events?${query}` : "/events";
+  const url = query ? `/events?${query}/` : "/events/";
   return api
     .get<{ data: EventSummary[] }>(url)
     .then((res) => res.data.data);
 }
 
 export function getEvent(id: number): Promise<EventItem> {
-  return api.get<EventResponse>(`/events/${id}`).then((r) => r.data.data);
+  return api.get<EventResponse>(`/events/${id}/`).then((r) => r.data.data);
 }
 
 export function toggleRsvpEvent(id: number): Promise<RsvpResponse> {
@@ -183,7 +183,7 @@ export function getFriendData(
   viewedUserId: number
 ): Promise<FriendDataResponse> {
   return api
-    .get<{ data: FriendDataResponse }>(`/users/${viewedUserId}/friendship`)
+    .get<{ data: FriendDataResponse }>(`/users/${viewedUserId}/friendship/`)
     .then((res) => res.data.data);
 }
 
@@ -222,7 +222,7 @@ export interface UserSummary {
 
 export function getMyFriends(): Promise<{ data: UserSummary[] }> {
   return api
-    .get<{ data: UserSummary[] }>("/me/friends")
+    .get<{ data: UserSummary[] }>("/me/friends/")
     .then((res) => res.data);
 }
 
@@ -236,7 +236,7 @@ export async function searchUsers(
   query: string
 ): Promise<{ results: SearchResultUser[] }> {
   return api
-    .get(`/users/search?q=${encodeURIComponent(query)}`)
+    .get(`/users/search?q=${encodeURIComponent(query)}/`)
     .then((res) => res.data);
 }
 
