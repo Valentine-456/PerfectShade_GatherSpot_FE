@@ -195,7 +195,9 @@ export default function ViewEvent() {
         </div>
 
         <div className="view-action-buttons">
-          <button className="outline-btn">Invite</button>
+          <button className="outline-btn" onClick={() => navigate(`/events/${id}/invite`)}>
+            Invite
+          </button>
           <button className="outline-btn" onClick={() => setShowShare(true)}>
             Share
           </button>

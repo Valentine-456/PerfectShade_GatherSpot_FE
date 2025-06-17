@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { AppRoutes } from "./types/AppRoutes";
-
+import InviteUsers   from "./pages/EventPages/InviteUsers";
+import Notifications from "./pages/Profile/Notifications";
 import PublicRoute from "./security/PublicRoute";
 import ProtectedRoute from "./security/ProtectedRoute";
 
@@ -31,6 +32,8 @@ export default function App() {
         <Route path={AppRoutes.EVENT_CREATE} element={<CreateEvent />} />
         <Route path={AppRoutes.EVENT_UPDATE} element={<UpdateEvent />} />
         <Route path={AppRoutes.EVENT_VIEW} element={<ViewEvent />} />
+        <Route path="/events/:id/invite" element={<InviteUsers />} />
+        <Route path="/notifications"      element={<Notifications />} />
         <Route path={AppRoutes.MAP} element={<MapPage />} />
         <Route path="/friends" element={<Friends />} />
         <Route path="/users/:id" element={<UserProfile />} />

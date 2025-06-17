@@ -1,7 +1,10 @@
-import "./Header.css";
 import notificationIcon from "@/assets/images/notification.png";
 import menuIcon from "@/assets/images/menu.png";
 import filterIcon from "@/assets/images/filter.png";
+import "./Header.css";
+import { useNavigate } from "react-router-dom";
+
+
 
 type HeaderProps = {
   toggleDrawer: () => void;
@@ -18,6 +21,7 @@ const Header = ({
   onSearchChange,
   onFilterToggle,
 }: HeaderProps) => {
+  const navigate = useNavigate();
   return (
     <div className="header-container">
       <div className="header-top">
@@ -34,11 +38,11 @@ const Header = ({
           <span className="value">Warsaw, Poland</span>
         </div>
 
-        <img
+          <img
           src={notificationIcon}
           alt="Notifications"
           className="icon notification-icon"
-        />
+          onClick={() => navigate("/notifications")}/>
       </div>
 
       <div className="header-bottom">
