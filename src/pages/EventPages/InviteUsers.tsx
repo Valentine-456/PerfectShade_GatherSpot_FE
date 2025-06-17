@@ -1,54 +1,57 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import "./InviteUsers.css";
 
-type User = { id: number; username: string; };
+type User = { id: number; username: string };
 
 export default function InviteUsers() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [users, setUsers] = useState<User[]>([]);
+  const [selectedIds, setSelected] = useState<number[]>([]);
+  const apiBase = import.meta.env.VITE_API_BASE_URL || "";
 
-  const [users, setUsers]       = useState<User[]>([]);
-  const [selected, setSelected] = useState<number[]>([]);
-
+  // 1) Fetch all users on mount
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/users/`, {
+    fetch(`${apiBase}/users/`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
-      .then(res => res.json())
-      .then(setUsers);
+      .then((res) => res.json())
+      .then(setUsers)
+      .catch(console.error);
   }, []);
 
-  const toggle = (uid: number) => {
-    setSelected(s =>
-      s.includes(uid) ? s.filter(x => x !== uid) : [...s, uid]
+  // 2) Toggle selection
+  const toggle = (uid: number) =>
+    setSelected((cur) =>
+      cur.includes(uid) ? cur.filter((x) => x !== uid) : [...cur, uid]
     );
-  };
 
-  const sendInvites = async () => {
-    await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/events/${id}/invite/`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ user_ids: selected }),
-      }
-    );
-    navigate(-1); // back to event view
+  // 3) Send invites
+  const sendInvites = () => {
+    fetch(`${apiBase}/events/${id}/invite/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ user_ids: selectedIds }),
+    })
+      .then(() => navigate(-1))
+      .catch(console.error);
   };
 
   return (
     <div className="phone-container">
+      
       <h2>Invite Users</h2>
-      <ul>
-        {users.map(u => (
+      <ul className="user-list">
+        {users.map((u) => (
           <li key={u.id}>
             <label>
               <input
                 type="checkbox"
-                checked={selected.includes(u.id)}
+                checked={selectedIds.includes(u.id)}
                 onChange={() => toggle(u.id)}
               />
               {u.username}
@@ -56,7 +59,11 @@ export default function InviteUsers() {
           </li>
         ))}
       </ul>
-      <button onClick={sendInvites} disabled={!selected.length}>
+      <button
+        className="primary-btn"
+        disabled={selectedIds.length === 0}
+        onClick={sendInvites}
+      >
         Send Invites
       </button>
     </div>

@@ -1,0 +1,52 @@
+/* Notifications.css */
+.phone-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 425px;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f59762;
+  align-items: center;
+  position: relative;
+  overflow: auto;
+  font-family: 'Montserrat', sans-serif;
+  padding: 16px;
+}
+
+
+h2 {
+  align-self: flex-start;
+  font-size: 1.4rem;
+  color: #2A2686;
+  margin-bottom: 12px;
+}
+
+ul.notifications-list {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+ul.notifications-list li {
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+ul.notifications-list li:hover {
+  background: #f0e8ff;
+}
+
+ul.notifications-list li .note-title {
+  font-weight: 500;
+  color: #333;
+}
+
+ul.notifications-list li .note-time {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 4px;
+}
